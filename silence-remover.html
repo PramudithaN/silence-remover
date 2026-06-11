@@ -4,525 +4,540 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Silence Remover</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <style>
+    :root {
+      --bg:             #0C0C11;
+      --surface:        #13131A;
+      --surface-2:      #1C1C26;
+      --surface-3:      #242430;
+      --border:         rgba(255,255,255,0.06);
+      --border-2:       rgba(255,255,255,0.10);
+      --primary:        #7C6FF7;
+      --primary-hover:  #8E83F8;
+      --primary-muted:  rgba(124,111,247,0.12);
+      --primary-glow:   rgba(124,111,247,0.22);
+      --success:        #34D399;
+      --success-muted:  rgba(52,211,153,0.10);
+      --success-border: rgba(52,211,153,0.22);
+      --error:          #F87171;
+      --error-muted:    rgba(248,113,113,0.10);
+      --error-border:   rgba(248,113,113,0.22);
+      --text-1: #EDEDF4; --text-2: #8E8EA8; --text-3: #4E4E68;
+      --r-s: 8px; --r-m: 12px; --r-l: 16px;
+    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0f0f13;
-      color: #e2e2e8;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg); color: var(--text-1);
+      min-height: 100vh; padding: 0 16px 56px;
+      -webkit-font-smoothing: antialiased;
     }
-
-    .card {
-      background: #1a1a23;
-      border: 1px solid #2e2e3e;
-      border-radius: 16px;
-      padding: 36px;
-      width: 100%;
-      max-width: 640px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+      line-height: 1; user-select: none; flex-shrink: 0;
     }
-
-    h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
-    .subtitle { font-size: 0.875rem; color: #8888aa; margin-bottom: 28px; }
-
+    /* Header */
+    .app-header {
+      max-width: 740px; margin: 0 auto; padding: 32px 0 28px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .app-logo {
+      width: 44px; height: 44px; background: var(--primary-muted);
+      border: 1px solid rgba(124,111,247,0.25); border-radius: var(--r-m);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--primary); flex-shrink: 0;
+    }
+    .app-logo .material-symbols-outlined { font-size: 22px; }
+    .app-header-copy h1 { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.4px; }
+    .app-header-copy p  { font-size: 0.78rem; color: var(--text-2); margin-top: 4px; }
+    .app-badge {
+      margin-left: auto; display: flex; align-items: center; gap: 5px;
+      font-size: 0.71rem; font-weight: 600; color: var(--success);
+      background: var(--success-muted); border: 1px solid var(--success-border);
+      border-radius: 20px; padding: 5px 12px; white-space: nowrap;
+    }
+    .app-badge .material-symbols-outlined { font-size: 14px; }
+    /* Layout */
+    .layout { max-width: 740px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+    /* Card */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-l); padding: 20px 22px; }
+    .card-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.7px; color: var(--text-3); margin-bottom: 16px;
+    }
+    .card-title .material-symbols-outlined { font-size: 15px; }
+    /* Drop zone */
     .drop-zone {
-      border: 2px dashed #3a3a55;
-      border-radius: 12px;
-      padding: 40px 24px;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
-      margin-bottom: 20px;
-      position: relative;
+      position: relative; border: 1.5px dashed var(--border-2);
+      border-radius: var(--r-m); padding: 44px 24px 40px;
+      text-align: center; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      background: var(--surface-2);
     }
-    .drop-zone:hover, .drop-zone.drag-over {
-      border-color: #7c6ff7;
-      background: rgba(124,111,247,0.05);
+    .drop-zone:hover { border-color: var(--primary); background: var(--primary-muted); }
+    .drop-zone.drag-over { border-color: var(--primary); background: var(--primary-muted); box-shadow: 0 0 0 4px var(--primary-glow); }
+    .drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .dz-icon {
+      width: 56px; height: 56px; background: var(--primary-muted);
+      border: 1px solid rgba(124,111,247,0.2); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px; color: var(--primary);
     }
-    .drop-zone input[type="file"] {
-      position: absolute; inset: 0; opacity: 0; cursor: pointer;
-      width: 100%; height: 100%;
+    .dz-icon .material-symbols-outlined { font-size: 26px; }
+    .dz-title { font-size: 0.95rem; font-weight: 600; }
+    .dz-sub { font-size: 0.8rem; color: var(--text-2); margin-top: 5px; }
+    .dz-sub span { color: var(--primary); font-weight: 600; }
+    .format-chips { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+    .fmt-chip {
+      font-size: 0.67rem; font-weight: 700; letter-spacing: 0.3px;
+      padding: 4px 9px; border-radius: 6px;
+      background: var(--surface-3); color: var(--text-2); border: 1px solid var(--border-2);
     }
-
-    .controls { display: flex; flex-direction: column; gap: 18px; margin-bottom: 28px; }
-    .control-row { display: flex; flex-direction: column; gap: 6px; }
-    .control-header { display: flex; justify-content: space-between; align-items: baseline; }
-    .control-label { font-size: 0.875rem; font-weight: 600; color: #ccccdd; }
-    .control-value { font-size: 0.8rem; color: #7c6ff7; font-weight: 700; }
-    .control-hint { font-size: 0.75rem; color: #666680; }
-
+    .dz-selected { margin-top: 14px; font-size: 0.82rem; color: var(--primary); font-weight: 500; }
+    /* Settings */
+    .settings-list { display: flex; flex-direction: column; gap: 22px; }
+    .setting { display: grid; grid-template-columns: 1fr auto; row-gap: 10px; align-items: center; }
+    .setting-label { display: flex; align-items: center; gap: 7px; font-size: 0.85rem; font-weight: 500; }
+    .setting-label .material-symbols-outlined { font-size: 18px; color: var(--text-3); }
+    .setting-chip { font-size: 0.75rem; font-weight: 700; color: var(--primary); background: var(--primary-muted); padding: 3px 10px; border-radius: 20px; }
+    .setting-slider { grid-column: 1/-1; }
+    .setting-hint { grid-column: 1/-1; font-size: 0.74rem; color: var(--text-3); line-height: 1.5; margin-top: -4px; }
     input[type="range"] {
-      -webkit-appearance: none; width: 100%; height: 4px;
-      background: #2e2e45; border-radius: 4px; outline: none; cursor: pointer;
+      -webkit-appearance: none; width: 100%; height: 3px;
+      background: var(--surface-3); border-radius: 3px; outline: none; cursor: pointer;
     }
     input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none; width: 16px; height: 16px;
-      background: #7c6ff7; border-radius: 50%;
-      border: 2px solid #1a1a23; box-shadow: 0 0 0 2px #7c6ff7;
+      -webkit-appearance: none; width: 18px; height: 18px;
+      background: var(--primary); border-radius: 50%;
+      border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--primary);
+      transition: transform 0.15s, box-shadow 0.15s;
     }
-
-    /* ── File queue ─────────────────────────────────────────── */
-    .file-queue { display: none; flex-direction: column; gap: 6px; margin-bottom: 20px; max-height: 280px; overflow-y: auto; }
-    .file-queue.visible { display: flex; }
-
-    .queue-item {
-      display: grid;
-      grid-template-columns: 1fr auto auto auto;
-      align-items: center;
-      gap: 10px;
-      background: #12121a;
-      border-radius: 8px;
-      padding: 10px 12px;
-      border: 1px solid #22223a;
-    }
-    .qi-name { font-size: 0.82rem; color: #ccccdd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
-    .qi-status { font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
-    .qi-status.queued     { background: #2e2e45; color: #8888aa; }
-    .qi-status.processing { background: rgba(124,111,247,0.25); color: #a78bfa; }
-    .qi-status.done       { background: rgba(74,222,128,0.15); color: #4ade80; }
-    .qi-status.error      { background: rgba(255,128,128,0.15); color: #ff8080; }
-    .qi-meta { font-size: 0.72rem; color: #666680; white-space: nowrap; min-width: 52px; text-align: right; }
-    .qi-dl { background: #1e3a2a; color: #4ade80; border: 1px solid #2d5a3d; border-radius: 6px; padding: 4px 10px; font-size: 0.72rem; cursor: pointer; display: none; white-space: nowrap; }
-    .qi-dl.visible { display: block; }
-    .qi-dl:hover { background: #254d37; }
-
-    .waveform-wrap { background: #12121a; border-radius: 10px; overflow: hidden; margin-bottom: 20px; display: none; }
-    .waveform-wrap.visible { display: block; }
+    input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.15); box-shadow: 0 0 0 4px var(--primary-glow); }
+    /* Waveform */
+    .waveform-card { display: none; }
+    .waveform-card.visible { display: block; }
+    .waveform-legend { margin-left: auto; font-size: 0.7rem; color: var(--text-3); font-weight: 500; text-transform: none; letter-spacing: 0; }
+    .waveform-legend span { color: var(--primary); }
+    .waveform-wrap { border-radius: var(--r-s); overflow: hidden; background: var(--surface-2); }
     canvas { width: 100%; display: block; }
-
-    .stats { display: none; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-    .stats.visible { display: grid; }
-    .stat { background: #12121a; border-radius: 8px; padding: 10px 12px; text-align: center; }
-    .stat-value { font-size: 1rem; font-weight: 700; color: #7c6ff7; }
-    .stat-label { font-size: 0.7rem; color: #666680; margin-top: 2px; }
-
-    .progress-wrap { display: none; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-    .progress-wrap.visible { display: flex; }
-    .progress-bar-track { height: 6px; background: #2e2e45; border-radius: 6px; overflow: hidden; }
-    .progress-bar-fill { height: 100%; background: linear-gradient(90deg,#7c6ff7,#a78bfa); border-radius: 6px; transition: width 0.1s; width: 0%; }
-    .progress-text { font-size: 0.8rem; color: #8888aa; text-align: center; }
-
-    .btn { width: 100%; padding: 14px; font-size: 1rem; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; }
-    .btn-primary { background: linear-gradient(135deg,#7c6ff7,#a78bfa); color: #fff; }
-    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-    .btn-download { background: #1e3a2a; color: #4ade80; border: 1px solid #2d5a3d; margin-top: 12px; display: none; }
-    .btn-download.visible { display: block; }
-    .btn-download-all { background: #1a2a3a; color: #60a5fa; border: 1px solid #1e3a5a; margin-top: 12px; display: none; }
-    .btn-download-all.visible { display: block; }
-
-    .error { background: #2a1a1a; border: 1px solid #5a2a2a; color: #ff8080; border-radius: 8px; padding: 12px 14px; font-size: 0.82rem; margin-bottom: 16px; display: none; }
-    .error.visible { display: block; }
+    /* Stats */
+    .stats-row { display: none; grid-template-columns: repeat(3,1fr); gap: 8px; }
+    .stats-row.visible { display: grid; }
+    .stat-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-m); padding: 14px 16px; text-align: center; }
+    .stat-card.hi { border-color: var(--success-border); background: var(--success-muted); }
+    .stat-icon { color: var(--text-3); margin-bottom: 6px; }
+    .stat-icon .material-symbols-outlined { font-size: 20px; }
+    .stat-card.hi .stat-icon { color: var(--success); }
+    .stat-val { font-size: 1.15rem; font-weight: 700; color: var(--primary); line-height: 1; }
+    .stat-card.hi .stat-val { color: var(--success); }
+    .stat-lbl { font-size: 0.67rem; font-weight: 600; color: var(--text-3); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    /* Queue */
+    .queue-card { display: none; }
+    .queue-card.visible { display: block; }
+    .queue-list { display: flex; flex-direction: column; gap: 6px; }
+    .queue-item {
+      display: grid; grid-template-columns: 40px 1fr auto auto;
+      align-items: center; gap: 12px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: var(--r-m); padding: 11px 14px; transition: border-color 0.2s;
+    }
+    .queue-item.processing { border-color: rgba(124,111,247,0.28); }
+    .queue-item.done       { border-color: var(--success-border); }
+    .queue-item.error      { border-color: var(--error-border); }
+    .qi-icon {
+      width: 40px; height: 40px; border-radius: var(--r-s);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; background: var(--surface-3); color: var(--text-3); transition: background 0.2s, color 0.2s;
+    }
+    .qi-icon .material-symbols-outlined { font-size: 20px; }
+    .qi-icon.processing { background: var(--primary-muted); color: var(--primary); }
+    .qi-icon.done       { background: var(--success-muted); color: var(--success); }
+    .qi-icon.error      { background: var(--error-muted);   color: var(--error); }
+    .qi-name { font-size: 0.83rem; font-weight: 500; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 340px; }
+    .qi-sub  { font-size: 0.72rem; color: var(--text-3); margin-top: 3px; }
+    .qi-badge { font-size: 0.69rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+    .qi-badge.queued     { background: var(--surface-3);     color: var(--text-3); }
+    .qi-badge.processing { background: var(--primary-muted); color: var(--primary); }
+    .qi-badge.done       { background: var(--success-muted); color: var(--success); }
+    .qi-badge.error      { background: var(--error-muted);   color: var(--error); }
+    .qi-dl {
+      width: 34px; height: 34px; border-radius: var(--r-s);
+      border: 1px solid var(--border-2); background: var(--surface-3); color: var(--text-2);
+      display: none; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.15s; flex-shrink: 0;
+    }
+    .qi-dl .material-symbols-outlined { font-size: 18px; }
+    .qi-dl.visible { display: flex; }
+    .qi-dl:hover { background: var(--success-muted); color: var(--success); border-color: var(--success-border); }
+    /* Progress */
+    .progress-card { display: none; }
+    .progress-card.visible { display: block; }
+    .progress-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .progress-msg { font-size: 0.82rem; color: var(--text-2); }
+    .progress-pct { font-size: 0.82rem; font-weight: 700; color: var(--primary); }
+    .progress-track { height: 4px; background: var(--surface-3); border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), #A78BFA); border-radius: 4px; transition: width 0.15s ease; width: 0%; }
+    /* Error */
+    .error-box {
+      display: none; align-items: flex-start; gap: 10px;
+      background: var(--error-muted); border: 1px solid var(--error-border);
+      border-radius: var(--r-m); padding: 13px 16px; font-size: 0.82rem; color: var(--error);
+    }
+    .error-box.visible { display: flex; }
+    .error-box .material-symbols-outlined { font-size: 18px; margin-top: 1px; }
+    /* Buttons */
+    .action-area { display: flex; flex-direction: column; gap: 8px; }
+    .btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 14px 20px; font-family: inherit;
+      font-size: 0.9rem; font-weight: 600; border: none; border-radius: var(--r-m);
+      cursor: pointer; transition: all 0.15s; letter-spacing: 0.1px; line-height: 1;
+    }
+    .btn .material-symbols-outlined { font-size: 20px; }
+    .btn:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+    .btn-process { background: var(--primary); color: #fff; }
+    .btn-process:hover { background: var(--primary-hover); box-shadow: 0 4px 24px var(--primary-glow); }
+    .btn-download { background: var(--success-muted); color: var(--success); border: 1px solid var(--success-border); display: none; }
+    .btn-download.visible { display: flex; }
+    .btn-download:hover { background: rgba(52,211,153,0.18); }
+    .btn-zip { background: var(--primary-muted); color: var(--primary); border: 1px solid rgba(124,111,247,0.22); display: none; }
+    .btn-zip.visible { display: flex; }
+    .btn-zip:hover { background: rgba(124,111,247,0.2); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin { animation: spin 0.75s linear infinite; display: inline-block; }
   </style>
 </head>
 <body>
-<div class="card">
-  <h1>Silence Remover</h1>
-  <p class="subtitle">Strips silence from audio — 100% in your browser, nothing uploaded.</p>
 
-  <div class="drop-zone" id="dropZone">
-    <input type="file" id="fileInput" accept="audio/*" multiple />
-    <span style="font-size:2.2rem;display:block;margin-bottom:10px">🎵</span>
-    <div style="font-size:0.95rem;color:#aaaacc">Drop audio files or <span style="color:#7c6ff7;font-weight:600">click to browse</span></div>
-    <div style="font-size:0.75rem;color:#555570;margin-top:4px">MP3 · WAV · M4A · OGG · FLAC · supports multiple files</div>
-    <div style="font-size:0.8rem;color:#7c6ff7;margin-top:8px;font-weight:500" id="fileCount"></div>
+<header class="app-header">
+  <div class="app-logo"><span class="material-symbols-outlined">graphic_eq</span></div>
+  <div class="app-header-copy">
+    <h1>Silence Remover</h1>
+    <p>Strip silence from audio files in bulk</p>
   </div>
+  <div class="app-badge">
+    <span class="material-symbols-outlined">lock</span>
+    100% local &mdash; nothing uploaded
+  </div>
+</header>
 
-  <!-- Batch file queue -->
-  <div class="file-queue" id="fileQueue"></div>
+<main class="layout">
 
-  <div class="controls">
-    <div class="control-row">
-      <div class="control-header">
-        <span class="control-label">Silence Threshold</span>
-        <span class="control-value" id="thresholdVal">-40 dB</span>
+  <div class="card">
+    <div class="card-title"><span class="material-symbols-outlined">upload_file</span>Select Files</div>
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="fileInput" accept="audio/*" multiple />
+      <div class="dz-icon"><span class="material-symbols-outlined">audio_file</span></div>
+      <div class="dz-title">Drop audio files here</div>
+      <div class="dz-sub">or <span>click to browse</span> &mdash; supports multiple files at once</div>
+      <div class="format-chips">
+        <span class="fmt-chip">MP3</span><span class="fmt-chip">WAV</span>
+        <span class="fmt-chip">M4A</span><span class="fmt-chip">OGG</span>
+        <span class="fmt-chip">FLAC</span><span class="fmt-chip">AIFF</span>
       </div>
-      <input type="range" id="threshold" min="-70" max="-10" step="1" value="-40" />
-      <span class="control-hint">Raise if noisy room. Lower for studio recordings.</span>
-    </div>
-    <div class="control-row">
-      <div class="control-header">
-        <span class="control-label">Min Silence Duration</span>
-        <span class="control-value" id="minSilenceVal">300 ms</span>
-      </div>
-      <input type="range" id="minSilence" min="50" max="2000" step="50" value="300" />
-      <span class="control-hint">Only remove silences longer than this.</span>
-    </div>
-    <div class="control-row">
-      <div class="control-header">
-        <span class="control-label">Padding Around Speech</span>
-        <span class="control-value" id="paddingVal">50 ms</span>
-      </div>
-      <input type="range" id="padding" min="0" max="300" step="10" value="50" />
-      <span class="control-hint">Buffer kept around each word so nothing gets clipped.</span>
+      <div class="dz-selected" id="fileCount"></div>
     </div>
   </div>
 
-  <div class="waveform-wrap" id="waveformWrap">
-    <canvas id="waveformCanvas" height="80"></canvas>
+  <div class="card queue-card" id="queueCard">
+    <div class="card-title"><span class="material-symbols-outlined">queue_music</span>File Queue</div>
+    <div class="queue-list" id="fileQueue"></div>
   </div>
 
-  <div class="stats" id="statsBar">
-    <div class="stat"><div class="stat-value" id="statOriginal">—</div><div class="stat-label">Original</div></div>
-    <div class="stat"><div class="stat-value" id="statOutput">—</div><div class="stat-label">Output</div></div>
-    <div class="stat"><div class="stat-value" id="statSaved">—</div><div class="stat-label">Saved</div></div>
+  <div class="card">
+    <div class="card-title"><span class="material-symbols-outlined">tune</span>Processing Settings</div>
+    <div class="settings-list">
+      <div class="setting">
+        <div class="setting-label"><span class="material-symbols-outlined">volume_down</span>Silence Threshold</div>
+        <div class="setting-chip" id="thresholdVal">&minus;40 dB</div>
+        <div class="setting-slider"><input type="range" id="threshold" min="-70" max="-10" step="1" value="-40" /></div>
+        <div class="setting-hint">Audio below this level is treated as silence. Raise for noisy rooms, lower for studio recordings.</div>
+      </div>
+      <div class="setting">
+        <div class="setting-label"><span class="material-symbols-outlined">timer</span>Min Silence Duration</div>
+        <div class="setting-chip" id="minSilenceVal">300 ms</div>
+        <div class="setting-slider"><input type="range" id="minSilence" min="50" max="2000" step="50" value="300" /></div>
+        <div class="setting-hint">Gaps shorter than this are preserved to avoid choppy output on rapid speech.</div>
+      </div>
+      <div class="setting">
+        <div class="setting-label"><span class="material-symbols-outlined">space_bar</span>Speech Padding</div>
+        <div class="setting-chip" id="paddingVal">50 ms</div>
+        <div class="setting-slider"><input type="range" id="padding" min="0" max="300" step="10" value="50" /></div>
+        <div class="setting-hint">Buffer of audio kept around each speech segment so words are never clipped.</div>
+      </div>
+    </div>
   </div>
 
-  <div class="progress-wrap" id="progressWrap">
-    <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
-    <div class="progress-text" id="progressText">Processing…</div>
+  <div class="card waveform-card" id="waveformCard">
+    <div class="card-title">
+      <span class="material-symbols-outlined">waveform</span>Waveform
+      <span class="waveform-legend"><span>Purple</span> = speech kept &nbsp;&middot;&nbsp; dark = silence removed</span>
+    </div>
+    <div class="waveform-wrap"><canvas id="waveformCanvas" height="72"></canvas></div>
   </div>
 
-  <div class="error" id="errorBox"></div>
-  <button class="btn btn-primary" id="processBtn" disabled>Remove Silence</button>
-  <button class="btn btn-download" id="downloadBtn">⬇ Download</button>
-  <button class="btn btn-download-all" id="downloadAllBtn">⬇ Download as ZIP</button>
-</div>
+  <div class="stats-row" id="statsRow">
+    <div class="stat-card">
+      <div class="stat-icon"><span class="material-symbols-outlined">schedule</span></div>
+      <div class="stat-val" id="statOriginal">&mdash;</div>
+      <div class="stat-lbl">Original</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon"><span class="material-symbols-outlined">compress</span></div>
+      <div class="stat-val" id="statOutput">&mdash;</div>
+      <div class="stat-lbl">Output</div>
+    </div>
+    <div class="stat-card hi">
+      <div class="stat-icon"><span class="material-symbols-outlined">bolt</span></div>
+      <div class="stat-val" id="statSaved">&mdash;</div>
+      <div class="stat-lbl">Time Saved</div>
+    </div>
+  </div>
+
+  <div class="card progress-card" id="progressCard">
+    <div class="progress-head">
+      <span class="progress-msg" id="progressMsg">Processing&hellip;</span>
+      <span class="progress-pct" id="progressPct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div class="error-box" id="errorBox">
+    <span class="material-symbols-outlined">error</span>
+    <span id="errorMsg"></span>
+  </div>
+
+  <div class="action-area">
+    <button class="btn btn-process" id="processBtn" disabled>
+      <span class="material-symbols-outlined">auto_fix_high</span>Remove Silence
+    </button>
+    <button class="btn btn-download" id="downloadBtn">
+      <span class="material-symbols-outlined">download</span>Download
+    </button>
+    <button class="btn btn-zip" id="downloadAllBtn">
+      <span class="material-symbols-outlined">folder_zip</span>Download as ZIP
+    </button>
+  </div>
+
+</main>
 
 <script>
 (() => {
-  const dropZone       = document.getElementById('dropZone');
-  const fileInput      = document.getElementById('fileInput');
-  const fileCount      = document.getElementById('fileCount');
-  const fileQueue      = document.getElementById('fileQueue');
-  const processBtn     = document.getElementById('processBtn');
-  const downloadBtn    = document.getElementById('downloadBtn');
-  const downloadAllBtn = document.getElementById('downloadAllBtn');
-  const progressWrap   = document.getElementById('progressWrap');
-  const progressFill   = document.getElementById('progressFill');
-  const progressText   = document.getElementById('progressText');
-  const errorBox       = document.getElementById('errorBox');
-  const waveformWrap   = document.getElementById('waveformWrap');
-  const canvas         = document.getElementById('waveformCanvas');
-  const ctx2d          = canvas.getContext('2d');
-  const statsBar       = document.getElementById('statsBar');
+  const $ = id => document.getElementById(id);
+  const dropZone=$('dropZone'),fileInput=$('fileInput'),fileCount=$('fileCount');
+  const queueCard=$('queueCard'),fileQueue=$('fileQueue');
+  const processBtn=$('processBtn'),downloadBtn=$('downloadBtn'),downloadAllBtn=$('downloadAllBtn');
+  const progressCard=$('progressCard'),progressFill=$('progressFill'),progressMsg=$('progressMsg'),progressPct=$('progressPct');
+  const errorBox=$('errorBox'),errorMsg=$('errorMsg');
+  const waveformCard=$('waveformCard'),canvas=$('waveformCanvas'),ctx2d=canvas.getContext('2d'),statsRow=$('statsRow');
+  const thrSlider=$('threshold'),silSlider=$('minSilence'),padSlider=$('padding');
 
-  const thresholdSlider  = document.getElementById('threshold');
-  const minSilenceSlider = document.getElementById('minSilence');
-  const paddingSlider    = document.getElementById('padding');
+  thrSlider.addEventListener('input',()=>$('thresholdVal').textContent='\u2212'+Math.abs(thrSlider.value)+' dB');
+  silSlider.addEventListener('input',()=>$('minSilenceVal').textContent=silSlider.value+' ms');
+  padSlider.addEventListener('input',()=>$('paddingVal').textContent=padSlider.value+' ms');
 
-  thresholdSlider.addEventListener('input',  () => document.getElementById('thresholdVal').textContent  = thresholdSlider.value  + ' dB');
-  minSilenceSlider.addEventListener('input', () => document.getElementById('minSilenceVal').textContent = minSilenceSlider.value + ' ms');
-  paddingSlider.addEventListener('input',    () => document.getElementById('paddingVal').textContent    = paddingSlider.value    + ' ms');
+  let selectedFiles=[],outputBlobs=[];
 
-  let selectedFiles = [];
-  let outputBlobs   = [];
+  fileInput.addEventListener('change',()=>{if(fileInput.files.length)loadFiles(fileInput.files);});
+  dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('drag-over');});
+  dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop',e=>{e.preventDefault();dropZone.classList.remove('drag-over');if(e.dataTransfer.files.length)loadFiles(e.dataTransfer.files);});
 
-  fileInput.addEventListener('change', () => { if (fileInput.files.length) loadFiles(fileInput.files); });
-  dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
-  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
-  dropZone.addEventListener('drop', e => {
-    e.preventDefault(); dropZone.classList.remove('drag-over');
-    if (e.dataTransfer.files.length) loadFiles(e.dataTransfer.files);
-  });
-
-  function loadFiles(files) {
-    selectedFiles = Array.from(files);
-    outputBlobs   = new Array(selectedFiles.length).fill(null);
-
-    fileCount.textContent = selectedFiles.length === 1
-      ? selectedFiles[0].name
-      : selectedFiles.length + ' files selected';
-
+  function loadFiles(files){
+    selectedFiles=Array.from(files);
+    outputBlobs=new Array(selectedFiles.length).fill(null);
+    fileCount.textContent=selectedFiles.length===1?selectedFiles[0].name:selectedFiles.length+' files selected';
     renderQueue();
-    waveformWrap.classList.remove('visible');
-    statsBar.classList.remove('visible');
-    downloadBtn.classList.remove('visible');
-    downloadAllBtn.classList.remove('visible');
-    processBtn.disabled = false;
-    hideError();
-
-    // Waveform preview only for single file
-    if (selectedFiles.length === 1) drawWaveformPreview(selectedFiles[0]);
+    waveformCard.classList.remove('visible');statsRow.classList.remove('visible');
+    downloadBtn.classList.remove('visible');downloadAllBtn.classList.remove('visible');
+    processBtn.disabled=false;hideError();
+    if(selectedFiles.length===1)drawWaveformPreview(selectedFiles[0]);
   }
 
-  // ── Queue UI ────────────────────────────────────────────────
-  function renderQueue() {
-    fileQueue.innerHTML = '';
-    fileQueue.classList.toggle('visible', selectedFiles.length > 0);
-    selectedFiles.forEach((file, i) => {
-      const row = document.createElement('div');
-      row.className = 'queue-item';
-      row.dataset.index = i;
-      row.innerHTML =
-        `<div class="qi-name" title="${escHtml(file.name)}">${escHtml(file.name)}</div>` +
-        `<span class="qi-status queued">Queued</span>` +
-        `<div class="qi-meta"></div>` +
-        `<button class="qi-dl">⬇ Save</button>`;
-      row.querySelector('.qi-dl').addEventListener('click', () => downloadFile(i));
+  function renderQueue(){
+    fileQueue.innerHTML='';queueCard.classList.add('visible');
+    selectedFiles.forEach((file,i)=>{
+      const row=document.createElement('div');
+      row.className='queue-item';row.dataset.index=i;
+      row.innerHTML='<div class="qi-icon" id="qi-icon-'+i+'"><span class="material-symbols-outlined">audio_file</span></div>'+
+        '<div><div class="qi-name" title="'+esc(file.name)+'">'+esc(shortName(file.name))+'</div>'+
+        '<div class="qi-sub">'+fmtBytes(file.size)+'</div></div>'+
+        '<span class="qi-badge queued" id="qi-badge-'+i+'">Queued</span>'+
+        '<button class="qi-dl" id="qi-dl-'+i+'" title="Download"><span class="material-symbols-outlined">download</span></button>';
+      row.querySelector('.qi-dl').addEventListener('click',()=>downloadSingle(i));
       fileQueue.appendChild(row);
     });
   }
 
-  function updateQueueItem(index, status, meta) {
-    const row = fileQueue.querySelector(`[data-index="${index}"]`);
-    if (!row) return;
-    const statusEl = row.querySelector('.qi-status');
-    const metaEl   = row.querySelector('.qi-meta');
-    const dlBtn    = row.querySelector('.qi-dl');
-    statusEl.className = 'qi-status ' + status;
-    statusEl.textContent = { queued: 'Queued', processing: 'Processing…', done: '✓ Done', error: '✗ Error' }[status] || status;
-    if (meta !== undefined) metaEl.textContent = meta;
-    dlBtn.classList.toggle('visible', status === 'done');
+  function setItemState(i,state,sub){
+    const row=fileQueue.querySelector('[data-index="'+i+'"]');if(!row)return;
+    const icon=$('qi-icon-'+i),badge=$('qi-badge-'+i),dl=$('qi-dl-'+i),subEl=row.querySelector('.qi-sub');
+    row.className='queue-item '+state;icon.className='qi-icon '+state;badge.className='qi-badge '+state;
+    const icons={queued:'audio_file',processing:'sync',done:'check_circle',error:'cancel'};
+    const labels={queued:'Queued',processing:'Processing\u2026',done:'Done',error:'Failed'};
+    const iconEl=icon.querySelector('.material-symbols-outlined');
+    iconEl.textContent=icons[state]||'audio_file';iconEl.classList.toggle('spin',state==='processing');
+    badge.textContent=labels[state]||state;
+    if(sub!==undefined)subEl.textContent=sub;
+    dl.classList.toggle('visible',state==='done');
   }
 
-  function downloadFile(index) {
-    const blob = outputBlobs[index];
-    if (!blob) return;
-    const name = selectedFiles[index].name.replace(/\.[^.]+$/, '') + '_trimmed.wav';
-    const url  = URL.createObjectURL(blob);
-    Object.assign(document.createElement('a'), { href: url, download: name }).click();
-    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  function downloadSingle(i){
+    if(!outputBlobs[i])return;
+    const url=URL.createObjectURL(outputBlobs[i]);
+    const name=selectedFiles[i].name.replace(/\.[^.]+$/,'')+' _trimmed.wav';
+    Object.assign(document.createElement('a'),{href:url,download:name}).click();
+    setTimeout(()=>URL.revokeObjectURL(url),60000);
   }
 
-  // ── Main processing loop ────────────────────────────────────
-  processBtn.addEventListener('click', processAll);
+  processBtn.addEventListener('click',processAll);
 
-  async function processAll() {
-    if (!selectedFiles.length) return;
-    hideError();
-    processBtn.disabled = true;
-    downloadBtn.classList.remove('visible');
-    downloadAllBtn.classList.remove('visible');
-    statsBar.classList.remove('visible');
-    progressWrap.classList.add('visible');
+  async function processAll(){
+    if(!selectedFiles.length)return;
+    hideError();processBtn.disabled=true;
+    downloadBtn.classList.remove('visible');downloadAllBtn.classList.remove('visible');
+    statsRow.classList.remove('visible');progressCard.classList.add('visible');
+    const total=selectedFiles.length;let doneCount=0;
 
-    const total = selectedFiles.length;
-    let doneCount = 0;
-
-    for (let i = 0; i < total; i++) {
-      updateQueueItem(i, 'processing');
-      setProgress(Math.round((i / total) * 100), `File ${i + 1} of ${total} — ${selectedFiles[i].name}`);
-
-      try {
-        const { blob, origSec, outSec, samples, padded } = await processSingleFile(selectedFiles[i]);
-        outputBlobs[i] = blob;
-        const saved = origSec - outSec;
-        updateQueueItem(i, 'done', `−${fmtTime(saved)}`);
+    for(let i=0;i<total;i++){
+      setItemState(i,'processing','Processing\u2026');
+      setProgress(Math.round((i/total)*100),'Processing file '+(i+1)+' of '+total);
+      try{
+        const{blob,origSec,outSec,samples,padded}=await processSingleFile(selectedFiles[i]);
+        outputBlobs[i]=blob;const saved=origSec-outSec;
+        setItemState(i,'done',fmtTime(origSec)+' \u2192 '+fmtTime(outSec)+'  \u00b7  \u2212'+fmtTime(saved)+' saved');
         doneCount++;
-
-        // For single file: show waveform + stats
-        if (total === 1) {
-          drawWaveform(samples, '#3a3a60', padded);
-          waveformWrap.classList.add('visible');
-          document.getElementById('statOriginal').textContent = fmtTime(origSec);
-          document.getElementById('statOutput').textContent   = fmtTime(outSec);
-          document.getElementById('statSaved').textContent    = fmtTime(saved);
-          statsBar.classList.add('visible');
+        if(total===1){
+          drawWaveform(samples,'#2A2A40',padded);waveformCard.classList.add('visible');
+          $('statOriginal').textContent=fmtTime(origSec);$('statOutput').textContent=fmtTime(outSec);$('statSaved').textContent=fmtTime(saved);
+          statsRow.classList.add('visible');
         }
-      } catch (err) {
-        outputBlobs[i] = null;
-        updateQueueItem(i, 'error', (err.message || 'Failed').slice(0, 28));
-      }
+      }catch(err){outputBlobs[i]=null;setItemState(i,'error',(err.message||'Unknown error').slice(0,50));}
     }
 
-    setProgress(100, `Done — ${doneCount} of ${total} file${total > 1 ? 's' : ''} processed`);
-    setTimeout(() => progressWrap.classList.remove('visible'), 1800);
+    setProgress(100,'Done \u2014 '+doneCount+' of '+total+' file'+(total>1?'s':'')+' processed');
+    setTimeout(()=>progressCard.classList.remove('visible'),2200);
 
-    if (doneCount > 0) {
-      if (total === 1) {
-        const name = selectedFiles[0].name.replace(/\.[^.]+$/, '') + '_trimmed.wav';
-        downloadBtn.textContent = `⬇ Download ${name}`;
+    if(doneCount>0){
+      if(total===1){
+        const n=selectedFiles[0].name.replace(/\.[^.]+$/,'')+' _trimmed.wav';
+        downloadBtn.innerHTML='<span class="material-symbols-outlined">download</span> Download '+esc(shortName(n,36));
         downloadBtn.classList.add('visible');
-      } else {
-        downloadAllBtn.textContent = `⬇ Download as ZIP (${doneCount} file${doneCount > 1 ? 's' : ''})`;
+      }else{
+        downloadAllBtn.innerHTML='<span class="material-symbols-outlined">folder_zip</span> Download as ZIP \u2014 '+doneCount+' file'+(doneCount>1?'s':'');
         downloadAllBtn.classList.add('visible');
       }
     }
-
-    processBtn.disabled = false;
+    processBtn.disabled=false;
   }
 
-  // ── Process one file → returns blob + metadata ──────────────
-  async function processSingleFile(file) {
-    const arrayBuffer = await file.arrayBuffer();
-    const audioCtx    = new AudioContext();
-    let audioBuffer;
-    try {
-      audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-    } finally {
-      await audioCtx.close();
+  async function processSingleFile(file){
+    const ab=await file.arrayBuffer();
+    const ac=new AudioContext();let audioBuf;
+    try{audioBuf=await ac.decodeAudioData(ab);}finally{await ac.close();}
+    const sr=audioBuf.sampleRate,nc=audioBuf.numberOfChannels,mono=getMono(audioBuf),len=mono.length;
+    const thrAmp=Math.pow(10,parseFloat(thrSlider.value)/20);
+    const fSz=Math.round(sr*0.02),minSilF=Math.round(parseInt(silSlider.value)/20),padF=Math.round(parseInt(padSlider.value)/20);
+    const numF=Math.ceil(len/fSz),speech=new Uint8Array(numF);
+    for(let i=0;i<numF;i++){
+      const s=i*fSz,e=Math.min(s+fSz,len);let sq=0;
+      for(let j=s;j<e;j++)sq+=mono[j]*mono[j];
+      speech[i]=Math.sqrt(sq/(e-s))>=thrAmp?1:0;
     }
-
-    const sampleRate   = audioBuffer.sampleRate;
-    const numChannels  = audioBuffer.numberOfChannels;
-    const samples      = getMono(audioBuffer);
-    const totalSamples = samples.length;
-
-    const thresholdAmp     = Math.pow(10, parseFloat(thresholdSlider.value) / 20);
-    const frameSize        = Math.round(sampleRate * 0.02);
-    const minSilenceFrames = Math.round(parseInt(minSilenceSlider.value) / 20);
-    const paddingFrames    = Math.round(parseInt(paddingSlider.value)    / 20);
-    const numFrames        = Math.ceil(totalSamples / frameSize);
-
-    // RMS per 20ms frame → speech/silence map
-    const isSpeech = new Uint8Array(numFrames);
-    for (let i = 0; i < numFrames; i++) {
-      const start = i * frameSize, end = Math.min(start + frameSize, totalSamples);
-      let sumSq = 0;
-      for (let s = start; s < end; s++) sumSq += samples[s] * samples[s];
-      isSpeech[i] = Math.sqrt(sumSq / (end - start)) >= thresholdAmp ? 1 : 0;
+    let silRun=0;
+    for(let i=0;i<numF;i++){if(speech[i])silRun=0;else if(++silRun<=minSilF)speech[i]=1;}
+    const padded=new Uint8Array(speech);
+    for(let i=0;i<numF;i++){if(speech[i])padded.fill(1,Math.max(0,i-padF),Math.min(numF,i+padF+1));}
+    const segs=[];let inSeg=false,segS=0;
+    for(let i=0;i<=numF;i++){
+      const s=i<numF?padded[i]:0;
+      if(s&&!inSeg){segS=i*fSz;inSeg=true;}if(!s&&inSeg){segs.push([segS,Math.min(i*fSz,len)]);inSeg=false;}
     }
-
-    // Bridge short silence gaps
-    let silenceRun = 0;
-    for (let i = 0; i < numFrames; i++) {
-      if (isSpeech[i]) { silenceRun = 0; }
-      else if (++silenceRun <= minSilenceFrames) { isSpeech[i] = 1; }
-    }
-
-    // Padding
-    const padded = new Uint8Array(isSpeech);
-    for (let i = 0; i < numFrames; i++) {
-      if (isSpeech[i]) padded.fill(1, Math.max(0, i - paddingFrames), Math.min(numFrames, i + paddingFrames + 1));
-    }
-
-    // Collect contiguous speech ranges
-    const segments = [];
-    let inSpeech = false, segStart = 0;
-    for (let i = 0; i <= numFrames; i++) {
-      const speech = i < numFrames ? padded[i] : 0;
-      if (speech && !inSpeech)       { segStart = i * frameSize; inSpeech = true; }
-      else if (!speech && inSpeech)  { segments.push([segStart, Math.min(i * frameSize, totalSamples)]); inSpeech = false; }
-    }
-
-    if (!segments.length) throw new Error('No speech detected. Try raising the silence threshold.');
-
-    // Stitch output buffer
-    const totalOut  = segments.reduce((s, [a, b]) => s + b - a, 0);
-    const outBuffer = new AudioContext().createBuffer(numChannels, totalOut, sampleRate);
-    const srcCh     = Array.from({length: numChannels}, (_, c) => audioBuffer.getChannelData(c));
-    let writePos = 0;
-    for (const [start, end] of segments) {
-      for (let c = 0; c < numChannels; c++)
-        outBuffer.copyToChannel(srcCh[c].subarray(start, end), c, writePos);
-      writePos += end - start;
-    }
-
-    return {
-      blob:    encodeWAV(outBuffer),
-      origSec: totalSamples / sampleRate,
-      outSec:  totalOut     / sampleRate,
-      samples,
-      padded,
-    };
+    if(!segs.length)throw new Error('No speech detected \u2014 try raising the silence threshold.');
+    const outLen=segs.reduce((t,[a,b])=>t+b-a,0);
+    const outBuf=new AudioContext().createBuffer(nc,outLen,sr);
+    const srcCh=Array.from({length:nc},(_,c)=>audioBuf.getChannelData(c));
+    let wp=0;
+    for(const[a,b]of segs){for(let c=0;c<nc;c++)outBuf.copyToChannel(srcCh[c].subarray(a,b),c,wp);wp+=b-a;}
+    return{blob:encodeWAV(outBuf),origSec:len/sr,outSec:outLen/sr,samples:mono,padded};
   }
 
-  // Single file download button
-  downloadBtn.addEventListener('click', () => downloadFile(0));
+  downloadBtn.addEventListener('click',()=>downloadSingle(0));
 
-  // Download All as ZIP
-  downloadAllBtn.addEventListener('click', async () => {
-    if (typeof JSZip === 'undefined') {
-      showError('JSZip library not loaded. Check your internet connection.');
-      return;
-    }
-    downloadAllBtn.disabled = true;
-    downloadAllBtn.textContent = 'Zipping…';
-    try {
-      const zip = new JSZip();
-      for (let i = 0; i < outputBlobs.length; i++) {
-        if (outputBlobs[i]) {
-          const name = selectedFiles[i].name.replace(/\.[^.]+$/, '') + '_trimmed.wav';
-          zip.file(name, outputBlobs[i]);
-        }
+  downloadAllBtn.addEventListener('click',async()=>{
+    if(typeof JSZip==='undefined'){showError('JSZip failed to load.');return;}
+    downloadAllBtn.disabled=true;
+    downloadAllBtn.innerHTML='<span class="material-symbols-outlined spin">sync</span> Creating ZIP\u2026';
+    try{
+      const zip=new JSZip();
+      for(let i=0;i<outputBlobs.length;i++){
+        if(outputBlobs[i])zip.file(selectedFiles[i].name.replace(/\.[^.]+$/,'')+' _trimmed.wav',outputBlobs[i]);
       }
-      const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 3 } });
-      const url = URL.createObjectURL(zipBlob);
-      Object.assign(document.createElement('a'), { href: url, download: 'trimmed_audio.zip' }).click();
-      setTimeout(() => URL.revokeObjectURL(url), 60000);
-    } catch (err) {
-      showError('Failed to create ZIP: ' + err.message);
-    } finally {
-      const doneCount = outputBlobs.filter(Boolean).length;
-      downloadAllBtn.textContent = `⬇ Download as ZIP (${doneCount} file${doneCount > 1 ? 's' : ''})`;
-      downloadAllBtn.disabled = false;
+      const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:3}});
+      const url=URL.createObjectURL(blob);
+      Object.assign(document.createElement('a'),{href:url,download:'trimmed_audio.zip'}).click();
+      setTimeout(()=>URL.revokeObjectURL(url),60000);
+    }catch(err){showError('Failed to create ZIP: '+err.message);}
+    finally{
+      const n=outputBlobs.filter(Boolean).length;
+      downloadAllBtn.disabled=false;
+      downloadAllBtn.innerHTML='<span class="material-symbols-outlined">folder_zip</span> Download as ZIP \u2014 '+n+' file'+(n>1?'s':'');
     }
   });
 
-  // ── Waveform ─────────────────────────────────────────────────
-  async function drawWaveformPreview(file) {
-    try {
-      const ac  = new AudioContext();
-      const buf = await ac.decodeAudioData(await file.arrayBuffer());
-      await ac.close();
-      drawWaveform(buf.getChannelData(0), '#3a3a60', null);
-      waveformWrap.classList.add('visible');
-    } catch (_) {}
+  async function drawWaveformPreview(file){
+    try{
+      const ac=new AudioContext(),buf=await ac.decodeAudioData(await file.arrayBuffer());
+      await ac.close();drawWaveform(buf.getChannelData(0),'#2A2A40',null);waveformCard.classList.add('visible');
+    }catch(_){}
   }
 
-  function drawWaveform(samples, color, speechMap) {
-    const W = canvas.offsetWidth || 576, H = 80;
-    canvas.width  = W * devicePixelRatio;
-    canvas.height = H * devicePixelRatio;
-    ctx2d.scale(devicePixelRatio, devicePixelRatio);
-    ctx2d.clearRect(0, 0, W, H);
-    const step = Math.ceil(samples.length / W), mid = H / 2;
-    for (let x = 0; x < W; x++) {
-      let max = 0, base = x * step;
-      for (let j = 0; j < step; j++) { const v = Math.abs(samples[base+j]||0); if (v>max) max=v; }
-      if (speechMap) {
-        const fi = Math.floor((base / samples.length) * speechMap.length);
-        ctx2d.strokeStyle = speechMap[fi] ? '#7c6ff7' : '#2a2a40';
-      } else { ctx2d.strokeStyle = color; }
-      ctx2d.lineWidth = 1;
-      ctx2d.beginPath();
-      ctx2d.moveTo(x, mid - max*mid);
-      ctx2d.lineTo(x, mid + max*mid);
-      ctx2d.stroke();
+  function drawWaveform(samples,baseColor,speechMap){
+    const W=canvas.offsetWidth||700,H=72;
+    canvas.width=W*devicePixelRatio;canvas.height=H*devicePixelRatio;
+    ctx2d.scale(devicePixelRatio,devicePixelRatio);ctx2d.clearRect(0,0,W,H);
+    const step=Math.ceil(samples.length/W),mid=H/2;
+    for(let x=0;x<W;x++){
+      let max=0,base=x*step;
+      for(let j=0;j<step;j++){const v=Math.abs(samples[base+j]||0);if(v>max)max=v;}
+      ctx2d.strokeStyle=speechMap?(speechMap[Math.floor((base/samples.length)*speechMap.length)]?'#7C6FF7':'#1C1C26'):baseColor;
+      ctx2d.lineWidth=1;ctx2d.beginPath();ctx2d.moveTo(x,mid-max*mid);ctx2d.lineTo(x,mid+max*mid);ctx2d.stroke();
     }
   }
 
-  // ── Helpers ──────────────────────────────────────────────────
-  function getMono(buf) {
-    if (buf.numberOfChannels === 1) return buf.getChannelData(0);
-    const L = buf.getChannelData(0), R = buf.getChannelData(1);
-    const mono = new Float32Array(L.length);
-    for (let i = 0; i < L.length; i++) mono[i] = (L[i] + R[i]) * 0.5;
-    return mono;
+  function getMono(buf){
+    if(buf.numberOfChannels===1)return buf.getChannelData(0);
+    const L=buf.getChannelData(0),R=buf.getChannelData(1),m=new Float32Array(L.length);
+    for(let i=0;i<L.length;i++)m[i]=(L[i]+R[i])*0.5;return m;
   }
+  function fmtTime(sec){if(sec<60)return sec.toFixed(1)+'s';return Math.floor(sec/60)+':'+(sec%60).toFixed(0).padStart(2,'0');}
+  function fmtBytes(b){if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';return(b/1048576).toFixed(1)+' MB';}
+  function shortName(name,max){max=max||44;if(name.length<=max)return name;const dot=name.lastIndexOf('.'),ext=dot>0?name.slice(dot):'';return name.slice(0,max-ext.length-1)+'\u2026'+ext;}
+  function setProgress(pct,msg){progressFill.style.width=pct+'%';progressMsg.textContent=msg;progressPct.textContent=pct+'%';}
+  function showError(msg){errorMsg.textContent=msg;errorBox.classList.add('visible');}
+  function hideError(){errorBox.classList.remove('visible');}
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-  function fmtTime(sec) {
-    if (sec < 60) return sec.toFixed(1) + 's';
-    return Math.floor(sec/60) + ':' + (sec%60).toFixed(0).padStart(2,'0');
-  }
-
-  function setProgress(pct, msg) {
-    progressFill.style.width = pct + '%';
-    progressText.textContent  = msg;
-  }
-
-  function showError(msg) { errorBox.textContent = 'Error: ' + msg; errorBox.classList.add('visible'); }
-  function hideError()    { errorBox.classList.remove('visible'); }
-
-  function escHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  // ── WAV encoder ──────────────────────────────────────────────
-  function encodeWAV(audioBuffer) {
-    const nc = audioBuffer.numberOfChannels, sr = audioBuffer.sampleRate, n = audioBuffer.length;
-    const ba = nc * 2, dataSize = n * ba;
-    const buf = new ArrayBuffer(44 + dataSize), view = new DataView(buf);
-    const ws = (o, s) => { for (let i=0;i<s.length;i++) view.setUint8(o+i, s.charCodeAt(i)); };
-    ws(0,'RIFF'); view.setUint32(4, 36+dataSize,true); ws(8,'WAVE'); ws(12,'fmt ');
-    view.setUint32(16,16,true); view.setUint16(20,1,true); view.setUint16(22,nc,true);
-    view.setUint32(24,sr,true); view.setUint32(28,sr*ba,true);
-    view.setUint16(32,ba,true); view.setUint16(34,16,true);
-    ws(36,'data'); view.setUint32(40,dataSize,true);
-    let offset = 44;
-    for (let i=0;i<n;i++) for (let c=0;c<nc;c++) {
-      const s = Math.max(-1, Math.min(1, audioBuffer.getChannelData(c)[i]));
-      view.setInt16(offset, s<0 ? s*0x8000 : s*0x7FFF, true);
-      offset += 2;
+  function encodeWAV(ab){
+    const nc=ab.numberOfChannels,sr=ab.sampleRate,n=ab.length,ba=nc*2,ds=n*ba;
+    const buf=new ArrayBuffer(44+ds),v=new DataView(buf);
+    const ws=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));};
+    ws(0,'RIFF');v.setUint32(4,36+ds,true);ws(8,'WAVE');ws(12,'fmt ');
+    v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,nc,true);
+    v.setUint32(24,sr,true);v.setUint32(28,sr*ba,true);v.setUint16(32,ba,true);v.setUint16(34,16,true);
+    ws(36,'data');v.setUint32(40,ds,true);
+    let o=44;
+    for(let i=0;i<n;i++)for(let c=0;c<nc;c++){
+      const s=Math.max(-1,Math.min(1,ab.getChannelData(c)[i]));
+      v.setInt16(o,s<0?s*0x8000:s*0x7FFF,true);o+=2;
     }
-    return new Blob([buf], { type: 'audio/wav' });
+    return new Blob([buf],{type:'audio/wav'});
   }
 })();
 </script>
