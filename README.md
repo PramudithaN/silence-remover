@@ -1,6 +1,16 @@
 # Silence Remover
+![Javascript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 
 A lightweight, single-file browser tool that automatically strips silence from audio files -**nothing is uploaded, everything runs locally in your browser**.
+
+---
+
+## 📸 Preview
+
+**Hero**
+![Hero](public/Images/silece-remover.jpeg)
+
+---
 
 ## Features
 
@@ -26,3 +36,9 @@ A lightweight, single-file browser tool that automatically strips silence from a
 ## No Installation Required
 
 Just open the HTML file - no server, no dependencies, no build step.
+
+## 🙋‍♂️ Connect with Me
+
+- **GitHub**: [github.com/PramudithaN](https://github.com/PramudithaN)
+- **LinkedIn**: [linkedin.com/in/pramuditha-nadun-612b1b204](http://www.linkedin.com/in/pramuditha-nadun-612b1b204)
+- **Email**: pramudithanadun@gmail.com
