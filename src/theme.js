@@ -51,11 +51,12 @@ export const theme = createTheme({
           letterSpacing: '0.01em',
         },
         contained: {
-          background: 'linear-gradient(135deg, #64748B 0%, #E2E8F0 100%)',
-          boxShadow: '0 4px 20px rgba(255,255,255,0.12)',
+          background: 'rgba(255,255,255,0.92)',
+          color: '#0A0A0A',
+          boxShadow: '0 4px 20px rgba(255,255,255,0.10)',
           '&:hover': {
-            background: 'linear-gradient(135deg, #475569 0%, #CBD5E1 100%)',
-            boxShadow: '0 6px 28px rgba(255,255,255,0.20)',
+            background: 'rgba(255,255,255,1)',
+            boxShadow: '0 6px 28px rgba(255,255,255,0.18)',
           },
         },
         outlined: {
