@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Silence Remover</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f0f13;
+      color: #e2e2e8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #1a1a23;
+      border: 1px solid #2e2e3e;
+      border-radius: 16px;
+      padding: 36px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    }
+
+    h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+    .subtitle { font-size: 0.875rem; color: #8888aa; margin-bottom: 28px; }
+
+    .drop-zone {
+      border: 2px dashed #3a3a55;
+      border-radius: 12px;
+      padding: 40px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 28px;
+      position: relative;
+    }
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: #7c6ff7;
+      background: rgba(124,111,247,0.05);
+    }
+    .drop-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer;
+      width: 100%; height: 100%;
+    }
+
+    .controls { display: flex; flex-direction: column; gap: 18px; margin-bottom: 28px; }
+    .control-row { display: flex; flex-direction: column; gap: 6px; }
+    .control-header { display: flex; justify-content: space-between; align-items: baseline; }
+    .control-label { font-size: 0.875rem; font-weight: 600; color: #ccccdd; }
+    .control-value { font-size: 0.8rem; color: #7c6ff7; font-weight: 700; }
+    .control-hint { font-size: 0.75rem; color: #666680; }
+
+    input[type="range"] {
+      -webkit-appearance: none; width: 100%; height: 4px;
+      background: #2e2e45; border-radius: 4px; outline: none; cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 16px; height: 16px;
+      background: #7c6ff7; border-radius: 50%;
+      border: 2px solid #1a1a23; box-shadow: 0 0 0 2px #7c6ff7;
+    }
+
+    .waveform-wrap { background: #12121a; border-radius: 10px; overflow: hidden; margin-bottom: 20px; display: none; }
+    .waveform-wrap.visible { display: block; }
+    canvas { width: 100%; display: block; }
+
+    .stats { display: none; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .stats.visible { display: grid; }
+    .stat { background: #12121a; border-radius: 8px; padding: 10px 12px; text-align: center; }
+    .stat-value { font-size: 1rem; font-weight: 700; color: #7c6ff7; }
+    .stat-label { font-size: 0.7rem; color: #666680; margin-top: 2px; }
+
+    .progress-wrap { display: none; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .progress-wrap.visible { display: flex; }
+    .progress-bar-track { height: 6px; background: #2e2e45; border-radius: 6px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg,#7c6ff7,#a78bfa); border-radius: 6px; transition: width 0.1s; width: 0%; }
+    .progress-text { font-size: 0.8rem; color: #8888aa; text-align: center; }
+
+    .btn { width: 100%; padding: 14px; font-size: 1rem; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; }
+    .btn-primary { background: linear-gradient(135deg,#7c6ff7,#a78bfa); color: #fff; }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-download { background: #1e3a2a; color: #4ade80; border: 1px solid #2d5a3d; margin-top: 12px; display: none; }
+    .btn-download.visible { display: block; }
+
+    .error { background: #2a1a1a; border: 1px solid #5a2a2a; color: #ff8080; border-radius: 8px; padding: 12px 14px; font-size: 0.82rem; margin-bottom: 16px; display: none; }
+    .error.visible { display: block; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>Silence Remover</h1>
+  <p class="subtitle">Strips silence from audio — 100% in your browser, nothing uploaded.</p>
+
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="fileInput" accept="audio/*" />
+    <span style="font-size:2.2rem;display:block;margin-bottom:10px">🎵</span>
+    <div style="font-size:0.95rem;color:#aaaacc">Drop an audio file or <span style="color:#7c6ff7;font-weight:600">click to browse</span></div>
+    <div style="font-size:0.75rem;color:#555570;margin-top:4px">MP3 · WAV · M4A · OGG · FLAC</div>
+    <div style="font-size:0.8rem;color:#7c6ff7;margin-top:8px;font-weight:500" id="fileName"></div>
+  </div>
+
+  <div class="controls">
+    <div class="control-row">
+      <div class="control-header">
+        <span class="control-label">Silence Threshold</span>
+        <span class="control-value" id="thresholdVal">-40 dB</span>
+      </div>
+      <input type="range" id="threshold" min="-70" max="-10" step="1" value="-40" />
+      <span class="control-hint">Raise if noisy room. Lower for studio recordings.</span>
+    </div>
+    <div class="control-row">
+      <div class="control-header">
+        <span class="control-label">Min Silence Duration</span>
+        <span class="control-value" id="minSilenceVal">300 ms</span>
+      </div>
+      <input type="range" id="minSilence" min="50" max="2000" step="50" value="300" />
+      <span class="control-hint">Only remove silences longer than this.</span>
+    </div>
+    <div class="control-row">
+      <div class="control-header">
+        <span class="control-label">Padding Around Speech</span>
+        <span class="control-value" id="paddingVal">50 ms</span>
+      </div>
+      <input type="range" id="padding" min="0" max="300" step="10" value="50" />
+      <span class="control-hint">Buffer kept around each word so nothing gets clipped.</span>
+    </div>
+  </div>
+
+  <div class="waveform-wrap" id="waveformWrap">
+    <canvas id="waveformCanvas" height="80"></canvas>
+  </div>
+
+  <div class="stats" id="statsBar">
+    <div class="stat"><div class="stat-value" id="statOriginal">—</div><div class="stat-label">Original</div></div>
+    <div class="stat"><div class="stat-value" id="statOutput">—</div><div class="stat-label">Output</div></div>
+    <div class="stat"><div class="stat-value" id="statSaved">—</div><div class="stat-label">Saved</div></div>
+  </div>
+
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">Processing…</div>
+  </div>
+
+  <div class="error" id="errorBox"></div>
+  <button class="btn btn-primary" id="processBtn" disabled>Remove Silence</button>
+  <button class="btn btn-download" id="downloadBtn">⬇ Download trimmed.wav</button>
+</div>
+
+<script>
+(() => {
+  const dropZone     = document.getElementById('dropZone');
+  const fileInput    = document.getElementById('fileInput');
+  const fileName     = document.getElementById('fileName');
+  const processBtn   = document.getElementById('processBtn');
+  const downloadBtn  = document.getElementById('downloadBtn');
+  const progressWrap = document.getElementById('progressWrap');
+  const progressFill = document.getElementById('progressFill');
+  const progressText = document.getElementById('progressText');
+  const errorBox     = document.getElementById('errorBox');
+  const waveformWrap = document.getElementById('waveformWrap');
+  const canvas       = document.getElementById('waveformCanvas');
+  const ctx2d        = canvas.getContext('2d');
+  const statsBar     = document.getElementById('statsBar');
+
+  const thresholdSlider  = document.getElementById('threshold');
+  const minSilenceSlider = document.getElementById('minSilence');
+  const paddingSlider    = document.getElementById('padding');
+
+  thresholdSlider.addEventListener('input',  () => document.getElementById('thresholdVal').textContent  = thresholdSlider.value  + ' dB');
+  minSilenceSlider.addEventListener('input', () => document.getElementById('minSilenceVal').textContent = minSilenceSlider.value + ' ms');
+  paddingSlider.addEventListener('input',    () => document.getElementById('paddingVal').textContent    = paddingSlider.value    + ' ms');
+
+  let selectedFile = null;
+  let outputBlob   = null;
+
+  fileInput.addEventListener('change', () => { if (fileInput.files[0]) loadFile(fileInput.files[0]); });
+  dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault(); dropZone.classList.remove('drag-over');
+    const f = e.dataTransfer.files[0]; if (f) loadFile(f);
+  });
+
+  function loadFile(file) {
+    selectedFile = file;
+    fileName.textContent = file.name;
+    processBtn.disabled = false;
+    downloadBtn.classList.remove('visible');
+    outputBlob = null;
+    hideError();
+    drawWaveformPreview(file);
+  }
+
+  async function drawWaveformPreview(file) {
+    try {
+      const ab  = await file.arrayBuffer();
+      const ac  = new AudioContext();
+      const buf = await ac.decodeAudioData(ab);
+      await ac.close();
+      drawWaveform(buf.getChannelData(0), '#3a3a60', null);
+      waveformWrap.classList.add('visible');
+    } catch (_) {}
+  }
+
+  function drawWaveform(samples, color, speechMap) {
+    const W = canvas.offsetWidth || 488, H = 80;
+    canvas.width  = W * devicePixelRatio;
+    canvas.height = H * devicePixelRatio;
+    ctx2d.scale(devicePixelRatio, devicePixelRatio);
+    ctx2d.clearRect(0, 0, W, H);
+    const step = Math.ceil(samples.length / W), mid = H / 2;
+    for (let x = 0; x < W; x++) {
+      let max = 0, base = x * step;
+      for (let j = 0; j < step; j++) { const v = Math.abs(samples[base+j]||0); if (v>max) max=v; }
+      if (speechMap) {
+        const fi = Math.floor((base / samples.length) * speechMap.length);
+        ctx2d.strokeStyle = speechMap[fi] ? '#7c6ff7' : '#2a2a40';
+      } else { ctx2d.strokeStyle = color; }
+      ctx2d.lineWidth = 1;
+      ctx2d.beginPath();
+      ctx2d.moveTo(x, mid - max*mid);
+      ctx2d.lineTo(x, mid + max*mid);
+      ctx2d.stroke();
+    }
+  }
+
+  processBtn.addEventListener('click', process);
+
+  async function process() {
+    if (!selectedFile) return;
+    hideError();
+    setProgress(0, 'Decoding audio…');
+    progressWrap.classList.add('visible');
+    processBtn.disabled = true;
+    downloadBtn.classList.remove('visible');
+    statsBar.classList.remove('visible');
+
+    try {
+      // Step 1 — decode
+      const arrayBuffer = await selectedFile.arrayBuffer();
+      const audioCtx    = new AudioContext();
+      const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+      await audioCtx.close();
+
+      setProgress(15, 'Analyzing silence…');
+
+      const sampleRate   = audioBuffer.sampleRate;
+      const numChannels  = audioBuffer.numberOfChannels;
+      const samples      = getMono(audioBuffer);
+      const totalSamples = samples.length;
+
+      const thresholdDB      = parseFloat(thresholdSlider.value);
+      const thresholdAmp     = Math.pow(10, thresholdDB / 20);
+      const minSilenceMs     = parseInt(minSilenceSlider.value);
+      const paddingMs        = parseInt(paddingSlider.value);
+      const frameSize        = Math.round(sampleRate * 0.02);        // 20ms
+      const minSilenceFrames = Math.round(minSilenceMs / 20);
+      const paddingFrames    = Math.round(paddingMs    / 20);
+
+      // Step 2 — RMS per frame → speech/silence
+      const numFrames = Math.ceil(totalSamples / frameSize);
+      const isSpeech  = new Uint8Array(numFrames);
+      for (let i = 0; i < numFrames; i++) {
+        const start = i * frameSize, end = Math.min(start + frameSize, totalSamples);
+        let sumSq = 0;
+        for (let s = start; s < end; s++) sumSq += samples[s] * samples[s];
+        isSpeech[i] = Math.sqrt(sumSq / (end - start)) >= thresholdAmp ? 1 : 0;
+      }
+
+      setProgress(35, 'Finding speech segments…');
+
+      // Step 3 — bridge short silence gaps
+      let silenceRun = 0;
+      for (let i = 0; i < numFrames; i++) {
+        if (isSpeech[i]) { silenceRun = 0; }
+        else if (++silenceRun <= minSilenceFrames) { isSpeech[i] = 1; }
+      }
+
+      // Step 4 — apply padding
+      const padded = new Uint8Array(isSpeech);
+      for (let i = 0; i < numFrames; i++) {
+        if (isSpeech[i]) {
+          padded.fill(1, Math.max(0, i - paddingFrames), Math.min(numFrames, i + paddingFrames + 1));
+        }
+      }
+
+      setProgress(50, 'Collecting speech segments…');
+
+      // Step 5 — collect contiguous speech ranges
+      const segments = [];
+      let inSpeech = false, segStart = 0;
+      for (let i = 0; i <= numFrames; i++) {
+        const speech = i < numFrames ? padded[i] : 0;
+        if (speech && !inSpeech)  { segStart = i * frameSize; inSpeech = true; }
+        else if (!speech && inSpeech) { segments.push([segStart, Math.min(i * frameSize, totalSamples)]); inSpeech = false; }
+      }
+
+      if (!segments.length) throw new Error('No speech detected. Try raising the silence threshold.');
+
+      setProgress(65, 'Stitching audio…');
+
+      // Step 6 — build output buffer (all channels)
+      const totalOut    = segments.reduce((s, [a, b]) => s + b - a, 0);
+      const outBuffer   = new AudioContext().createBuffer(numChannels, totalOut, sampleRate);
+      const outChannels = Array.from({length: numChannels}, (_, c) => audioBuffer.getChannelData(c));
+      let writePos = 0;
+      for (const [start, end] of segments) {
+        for (let c = 0; c < numChannels; c++)
+          outBuffer.copyToChannel(outChannels[c].subarray(start, end), c, writePos);
+        writePos += end - start;
+      }
+
+      setProgress(80, 'Encoding WAV…');
+
+      // Step 7 — encode WAV
+      outputBlob = encodeWAV(outBuffer);
+      setProgress(100, 'Done!');
+
+      drawWaveform(samples, '#3a3a60', padded);
+
+      const origSec = totalSamples / sampleRate, outSec = totalOut / sampleRate;
+      document.getElementById('statOriginal').textContent = fmtTime(origSec);
+      document.getElementById('statOutput').textContent   = fmtTime(outSec);
+      document.getElementById('statSaved').textContent    = fmtTime(origSec - outSec);
+      statsBar.classList.add('visible');
+      downloadBtn.classList.add('visible');
+    } catch (err) {
+      showError(err.message || String(err));
+    } finally {
+      progressWrap.classList.remove('visible');
+      processBtn.disabled = false;
+    }
+  }
+
+  downloadBtn.addEventListener('click', () => {
+    if (!outputBlob) return;
+    const url = URL.createObjectURL(outputBlob);
+    const a   = Object.assign(document.createElement('a'), { href: url, download: selectedFile.name.replace(/\.[^.]+$/, '') + '_trimmed.wav' });
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  });
+
+  // ── Helpers ─────────────────────────────────────────────────
+  function getMono(buf) {
+    if (buf.numberOfChannels === 1) return buf.getChannelData(0);
+    const L = buf.getChannelData(0), R = buf.getChannelData(1);
+    const mono = new Float32Array(L.length);
+    for (let i = 0; i < L.length; i++) mono[i] = (L[i] + R[i]) * 0.5;
+    return mono;
+  }
+
+  function fmtTime(sec) {
+    if (sec < 60) return sec.toFixed(1) + 's';
+    return Math.floor(sec/60) + ':' + (sec%60).toFixed(0).padStart(2,'0');
+  }
+
+  function setProgress(pct, msg) {
+    progressFill.style.width = pct + '%';
+    progressText.textContent  = msg;
+  }
+
+  function showError(msg) { errorBox.textContent = 'Error: ' + msg; errorBox.classList.add('visible'); }
+  function hideError()    { errorBox.classList.remove('visible'); }
+
+  // ── WAV encoder ──────────────────────────────────────────────
+  function encodeWAV(audioBuffer) {
+    const nc = audioBuffer.numberOfChannels, sr = audioBuffer.sampleRate, n = audioBuffer.length;
+    const ba = nc * 2, dataSize = n * ba;
+    const buf = new ArrayBuffer(44 + dataSize), view = new DataView(buf);
+
+    const ws = (o, s) => { for (let i=0;i<s.length;i++) view.setUint8(o+i, s.charCodeAt(i)); };
+    ws(0,'RIFF'); view.setUint32(4, 36+dataSize,true); ws(8,'WAVE'); ws(12,'fmt ');
+    view.setUint32(16,16,true); view.setUint16(20,1,true); view.setUint16(22,nc,true);
+    view.setUint32(24,sr,true); view.setUint32(28,sr*ba,true);
+    view.setUint16(32,ba,true); view.setUint16(34,16,true);
+    ws(36,'data'); view.setUint32(40,dataSize,true);
+
+    let offset = 44;
+    for (let i=0;i<n;i++) for (let c=0;c<nc;c++) {
+      const s = Math.max(-1, Math.min(1, audioBuffer.getChannelData(c)[i]));
+      view.setInt16(offset, s<0 ? s*0x8000 : s*0x7FFF, true);
+      offset += 2;
+    }
+    return new Blob([buf], { type: 'audio/wav' });
+  }
+})();
+</script>
+</body>
+</html>
