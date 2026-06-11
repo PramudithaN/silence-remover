@@ -31,7 +31,7 @@ const SETTINGS_CONFIG = [
 
 export default function SettingsCard({ settings, onChange }) {
   return (
-    <Box sx={{ bgcolor: 'background.paper', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 2, p: '20px 22px' }}>
+    <Box sx={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 2, p: '20px 22px', boxShadow: '0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
         <Tune sx={{ fontSize: 15, color: 'text.disabled' }} />
         <Typography variant="caption" fontWeight={600} textTransform="uppercase" letterSpacing={0.7} color="text.disabled">
@@ -50,7 +50,7 @@ export default function SettingsCard({ settings, onChange }) {
               <Box sx={{
                 fontSize: '0.75rem', fontWeight: 700,
                 px: 1.25, py: 0.35, borderRadius: '20px',
-                bgcolor: 'rgba(124,111,247,0.12)', color: 'primary.main',
+                background: 'rgba(255,255,255,0.08)', color: 'primary.main',
               }}>
                 {format(settings[key])}
               </Box>

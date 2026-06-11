@@ -4,10 +4,10 @@ import { QueueMusic, AudioFile, Sync, CheckCircle, Cancel, Download } from '@mui
 import { fmtBytes, shortName } from '../utils/audioUtils';
 
 const STATE_CFG = {
-  queued:     { label: 'Queued',       iconName: 'audio',   color: '#4E4E68', bg: 'rgba(255,255,255,0.04)',  border: 'rgba(255,255,255,0.06)' },
-  processing: { label: 'Processing…',  iconName: 'sync',    color: '#7C6FF7', bg: 'rgba(124,111,247,0.12)', border: 'rgba(124,111,247,0.28)' },
-  done:       { label: 'Done',         iconName: 'check',   color: '#34D399', bg: 'rgba(52,211,153,0.10)',  border: 'rgba(52,211,153,0.22)'  },
-  error:      { label: 'Failed',       iconName: 'cancel',  color: '#F87171', bg: 'rgba(248,113,113,0.10)', border: 'rgba(248,113,113,0.22)' },
+  queued:     { label: 'Queued',       iconName: 'audio',   color: '#475569', bg: 'rgba(255,255,255,0.04)',   border: 'rgba(255,255,255,0.07)'  },
+  processing: { label: 'Processing\u2026',  iconName: 'sync',    color: '#E2E8F0', bg: 'rgba(255,255,255,0.10)',  border: 'rgba(255,255,255,0.24)'  },
+  done:       { label: 'Done',         iconName: 'check',   color: '#34D399', bg: 'rgba(52,211,153,0.10)',   border: 'rgba(52,211,153,0.22)'   },
+  error:      { label: 'Failed',       iconName: 'cancel',  color: '#F87171', bg: 'rgba(248,113,113,0.10)',  border: 'rgba(248,113,113,0.22)'  },
 };
 
 function StateIcon({ iconName }) {
@@ -20,7 +20,7 @@ function StateIcon({ iconName }) {
 
 export default function FileQueueCard({ files, itemStates, outputBlobs, onDownload }) {
   return (
-    <Box sx={{ bgcolor: 'background.paper', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 2, p: '20px 22px' }}>
+      <Box sx={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 2, p: '20px 22px', boxShadow: '0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
         <QueueMusic sx={{ fontSize: 15, color: 'text.disabled' }} />
         <Typography variant="caption" fontWeight={600} textTransform="uppercase" letterSpacing={0.7} color="text.disabled">
@@ -40,7 +40,7 @@ export default function FileQueueCard({ files, itemStates, outputBlobs, onDownlo
               gridTemplateColumns: '40px 1fr auto auto',
               alignItems: 'center', gap: 1.5,
               p: '11px 14px',
-              bgcolor: 'rgba(255,255,255,0.02)',
+              bgcolor: 'rgba(255,255,255,0.03)',
               borderRadius: 2,
               border: '1px solid',
               borderColor: cfg.border,
@@ -87,7 +87,7 @@ export default function FileQueueCard({ files, itemStates, outputBlobs, onDownlo
                   color: hasBlob ? 'success.main' : 'text.disabled',
                   opacity: hasBlob ? 1 : 0,
                   pointerEvents: hasBlob ? 'auto' : 'none',
-                  '&:hover': { bgcolor: 'rgba(52,211,153,0.1)' },
+                  '&:hover': { bgcolor: 'rgba(52,211,153,0.12)', border: '1px solid rgba(52,211,153,0.25)' },
                 }}
               >
                 <Download sx={{ fontSize: 18 }} />

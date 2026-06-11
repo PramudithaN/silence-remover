@@ -133,17 +133,22 @@ export default function App() {
 
   // ── Render ─────────────────────────────────────────────────
   return (
-    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', pb: 8 }}>
-      <Container maxWidth="md" sx={{ px: { xs: 2, sm: 3 } }}>
+    <Box sx={{ background: 'linear-gradient(160deg, #0A0A0A 0%, #111118 55%, #0A0A0A 100%)', minHeight: '100vh', pb: 8, position: 'relative', overflow: 'hidden' }}>
+      {/* Ambient colour orbs */}
+      <Box sx={{ position: 'fixed', top: '-15%', left: '-8%', width: 620, height: 620, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
+      <Box sx={{ position: 'fixed', bottom: '-18%', right: '-8%', width: 660, height: 660, borderRadius: '50%', background: 'radial-gradient(circle, rgba(226,232,240,0.05) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
+      <Box sx={{ position: 'fixed', top: '38%', right: '14%', width: 360, height: 360, borderRadius: '50%', background: 'radial-gradient(circle, rgba(241,245,249,0.04) 0%, transparent 65%)', pointerEvents: 'none', zIndex: 0 }} />
+      <Container maxWidth="md" sx={{ px: { xs: 2, sm: 3 }, position: 'relative', zIndex: 1 }}>
 
         {/* ── Header ── */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 4 }}>
           <Box sx={{
             width: 44, height: 44, borderRadius: '12px',
-            bgcolor: 'rgba(124,111,247,0.12)',
-            border: '1px solid rgba(124,111,247,0.25)',
+            background: 'rgba(255,255,255,0.07)',
+            border: '1px solid rgba(255,255,255,0.18)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             color: 'primary.main',
+            boxShadow: '0 2px 12px rgba(255,255,255,0.06)',
           }}>
             <GraphicEq />
           </Box>
@@ -156,14 +161,20 @@ export default function App() {
             </Typography>
           </Box>
           <Box sx={{
-            ml: 'auto', display: 'flex', alignItems: 'center', gap: 0.75,
-            bgcolor: 'rgba(52,211,153,0.10)',
-            border: '1px solid rgba(52,211,153,0.22)',
-            borderRadius: '20px', px: 1.5, py: 0.7,
+            ml: 'auto', display: 'flex', alignItems: 'center', gap: 1,
+            background: 'linear-gradient(135deg, rgba(52,211,153,0.18) 0%, rgba(16,185,129,0.10) 100%)',
+            border: '1px solid rgba(52,211,153,0.40)',
+            backdropFilter: 'blur(12px)',
+            borderRadius: '20px', px: 2, py: 1,
+            boxShadow: '0 0 16px rgba(52,211,153,0.20), inset 0 1px 0 rgba(255,255,255,0.06)',
           }}>
-            <Lock sx={{ fontSize: 14, color: 'success.main' }} />
-            <Typography variant="caption" color="success.main" fontWeight={600}>
-              100% local — nothing uploaded
+            <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#34D399', boxShadow: '0 0 6px #34D399', flexShrink: 0,
+              animation: 'pulse 2s ease-in-out infinite',
+              '@keyframes pulse': { '0%,100%': { opacity: 1 }, '50%': { opacity: 0.4 } },
+            }} />
+            <Lock sx={{ fontSize: 13, color: '#34D399' }} />
+            <Typography variant="caption" sx={{ color: '#34D399', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.02em' }}>
+              Runs 100% in your browser - nothing uploaded
             </Typography>
           </Box>
         </Box>
@@ -188,7 +199,7 @@ export default function App() {
 
           {/* Progress */}
           {showProgress && (
-            <Box sx={{ bgcolor: 'background.paper', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 2, p: '16px 22px' }}>
+            <Box sx={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 2, p: '16px 22px', boxShadow: '0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                 <Typography variant="body2" color="text.secondary">{progress.msg}</Typography>
                 <Typography variant="body2" fontWeight={700} color="primary.main">{progress.pct}%</Typography>
@@ -223,9 +234,10 @@ export default function App() {
               onClick={() => downloadSingle(0)}
               sx={{
                 py: 1.8, fontWeight: 700,
-                borderColor: 'rgba(52,211,153,0.4)', color: 'success.main',
-                bgcolor: 'rgba(52,211,153,0.08)',
-                '&:hover': { bgcolor: 'rgba(52,211,153,0.14)', borderColor: 'success.main' },
+                borderColor: 'rgba(52,211,153,0.30)', color: 'success.main',
+                background: 'rgba(52,211,153,0.07)',
+                backdropFilter: 'blur(12px)',
+                '&:hover': { background: 'rgba(52,211,153,0.14)', borderColor: 'success.main', boxShadow: '0 4px 20px rgba(52,211,153,0.20)' },
               }}
             >
               Download Trimmed File
@@ -243,9 +255,10 @@ export default function App() {
               onClick={downloadAll}
               sx={{
                 py: 1.8, fontWeight: 700,
-                borderColor: 'rgba(124,111,247,0.4)',
-                bgcolor: 'rgba(124,111,247,0.08)',
-                '&:hover': { bgcolor: 'rgba(124,111,247,0.14)', borderColor: 'primary.main' },
+                borderColor: 'rgba(255,255,255,0.22)',
+                background: 'rgba(255,255,255,0.05)',
+                backdropFilter: 'blur(12px)',
+                '&:hover': { background: 'rgba(255,255,255,0.10)', borderColor: 'primary.main', boxShadow: '0 4px 20px rgba(255,255,255,0.12)' },
               }}
             >
               {zipBusy

@@ -15,7 +15,7 @@ export default function DropZoneCard({ onFilesSelected, files }) {
   }, [onFilesSelected]);
 
   return (
-    <Box sx={{ bgcolor: 'background.paper', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 2, p: '20px 22px' }}>
+      <Box sx={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 2, p: '20px 22px', boxShadow: '0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
       {/* Card title */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
         <UploadFile sx={{ fontSize: 15, color: 'text.disabled' }} />
@@ -33,13 +33,13 @@ export default function DropZoneCard({ onFilesSelected, files }) {
         sx={{
           position: 'relative',
           border: '1.5px dashed',
-          borderColor: dragging ? 'primary.main' : 'rgba(255,255,255,0.10)',
+          borderColor: dragging ? 'primary.main' : 'rgba(255,255,255,0.09)',
           borderRadius: 2, p: '44px 24px 40px',
           textAlign: 'center', cursor: 'pointer',
-          bgcolor: dragging ? 'rgba(124,111,247,0.12)' : 'rgba(255,255,255,0.02)',
+            bgcolor: dragging ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.02)',
           transition: 'all 0.2s',
-          boxShadow: dragging ? '0 0 0 4px rgba(124,111,247,0.22)' : 'none',
-          '&:hover': { borderColor: 'primary.main', bgcolor: 'rgba(124,111,247,0.08)' },
+          boxShadow: dragging ? '0 0 0 4px rgba(255,255,255,0.12)' : 'none',
+          '&:hover': { borderColor: 'primary.main', bgcolor: 'rgba(255,255,255,0.04)' },
         }}
       >
         <input
@@ -54,7 +54,8 @@ export default function DropZoneCard({ onFilesSelected, files }) {
         {/* Icon */}
         <Box sx={{
           width: 56, height: 56, borderRadius: '50%',
-          bgcolor: 'rgba(124,111,247,0.12)', border: '1px solid rgba(124,111,247,0.2)',
+          background: 'rgba(255,255,255,0.08)',
+          border: '1px solid rgba(255,255,255,0.16)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           color: 'primary.main', mx: 'auto', mb: 2,
         }}>

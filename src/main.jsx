@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           from: { transform: 'rotate(0deg)' },
           to:   { transform: 'rotate(360deg)' },
         },
-        'body': { fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' },
+        'body': { fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', backgroundColor: '#F8F9FB' },
       }} />
       <App />
     </ThemeProvider>
