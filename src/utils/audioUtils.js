@@ -72,7 +72,7 @@ export async function processSingleFile(file, { threshold, minSilence, padding }
     if (!s && inSeg)  { segs.push([segS, Math.min(i * fSz, len)]); inSeg = false; }
   }
 
-  if (!segs.length) throw new Error('No speech detected — try raising the silence threshold.');
+  if (!segs.length) throw new Error('No speech detected -try raising the silence threshold.');
 
   // Build output buffer
   const outLen    = segs.reduce((t, [a, b]) => t + b - a, 0);

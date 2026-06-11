@@ -66,7 +66,7 @@ export default function DropZoneCard({ onFilesSelected, files }) {
         <Typography variant="body2" color="text.secondary">
           or{' '}
           <Box component="span" color="primary.main" fontWeight={600}>click to browse</Box>
-          {' '}— supports multiple files at once
+          {' '}-supports multiple files at once
         </Typography>
 
         {/* Format chips */}

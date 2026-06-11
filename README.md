@@ -1,17 +1,17 @@
 # Silence Remover
 
-A lightweight, single-file browser tool that automatically strips silence from audio files — **nothing is uploaded, everything runs locally in your browser**.
+A lightweight, single-file browser tool that automatically strips silence from audio files -**nothing is uploaded, everything runs locally in your browser**.
 
 ## Features
 
-- **100% client-side** — your audio never leaves your device
+- **100% client-side** -your audio never leaves your device
 - Supports **MP3, WAV, M4A, OGG, FLAC**
 - Drag & drop or click-to-browse file input
 - Waveform preview of your audio
 - Three adjustable controls:
-  - **Silence Threshold** — dB level below which audio is considered silence
-  - **Min Silence Duration** — ignore silences shorter than this (ms)
-  - **Padding Around Speech** — buffer kept around each word to avoid clipping
+  - **Silence Threshold** -dB level below which audio is considered silence
+  - **Min Silence Duration** -ignore silences shorter than this (ms)
+  - **Padding Around Speech** -buffer kept around each word to avoid clipping
 - Live stats: original duration, output duration, time saved
 - Downloads result as `trimmed.wav`
 
@@ -25,4 +25,4 @@ A lightweight, single-file browser tool that automatically strips silence from a
 
 ## No Installation Required
 
-Just open the HTML file — no server, no dependencies, no build step.
+Just open the HTML file - no server, no dependencies, no build step.
