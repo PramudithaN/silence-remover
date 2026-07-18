@@ -94,7 +94,7 @@ export default function App() {
     }
 
     setOutputBlobs(blobs);
-    setProgress({ pct: 100, msg: `Done \u2014 ${doneCount} of ${total} file${total > 1 ? 's' : ''} processed` });
+    setProgress({ pct: 100, msg: `Done - ${doneCount} of ${total} file${total > 1 ? 's' : ''} processed` });
     setTimeout(() => setShowProgress(false), 2200);
     setProcessing(false);
   };
@@ -263,7 +263,7 @@ export default function App() {
             >
               {zipBusy
                 ? 'Creating ZIP\u2026'
-                : `Download as ZIP \u2014 ${doneCount} file${doneCount > 1 ? 's' : ''}`}
+                : `Download as ZIP - ${doneCount} file${doneCount > 1 ? 's' : ''}`}
             </Button>
           )}
         </Stack>

@@ -421,7 +421,7 @@
       }catch(err){outputBlobs[i]=null;setItemState(i,'error',(err.message||'Unknown error').slice(0,50));}
     }
 
-    setProgress(100,'Done \u2014 '+doneCount+' of '+total+' file'+(total>1?'s':'')+' processed');
+    setProgress(100,'Done - '+doneCount+' of '+total+' file'+(total>1?'s':'')+' processed');
     setTimeout(()=>progressCard.classList.remove('visible'),2200);
 
     if(doneCount>0){
@@ -430,7 +430,7 @@
         downloadBtn.innerHTML='<span class="material-symbols-outlined">download</span> Download '+esc(shortName(n,36));
         downloadBtn.classList.add('visible');
       }else{
-        downloadAllBtn.innerHTML='<span class="material-symbols-outlined">folder_zip</span> Download as ZIP \u2014 '+doneCount+' file'+(doneCount>1?'s':'');
+        downloadAllBtn.innerHTML='<span class="material-symbols-outlined">folder_zip</span> Download as ZIP - '+doneCount+' file'+(doneCount>1?'s':'');
         downloadAllBtn.classList.add('visible');
       }
     }
@@ -459,7 +459,7 @@
       const s=i<numF?padded[i]:0;
       if(s&&!inSeg){segS=i*fSz;inSeg=true;}if(!s&&inSeg){segs.push([segS,Math.min(i*fSz,len)]);inSeg=false;}
     }
-    if(!segs.length)throw new Error('No speech detected \u2014 try raising the silence threshold.');
+    if(!segs.length)throw new Error('No speech detected - try raising the silence threshold.');
     const outLen=segs.reduce((t,[a,b])=>t+b-a,0);
     const outBuf=new AudioContext().createBuffer(nc,outLen,sr);
     const srcCh=Array.from({length:nc},(_,c)=>audioBuf.getChannelData(c));
@@ -487,7 +487,7 @@
     finally{
       const n=outputBlobs.filter(Boolean).length;
       downloadAllBtn.disabled=false;
-      downloadAllBtn.innerHTML='<span class="material-symbols-outlined">folder_zip</span> Download as ZIP \u2014 '+n+' file'+(n>1?'s':'');
+      downloadAllBtn.innerHTML='<span class="material-symbols-outlined">folder_zip</span> Download as ZIP - '+n+' file'+(n>1?'s':'');
     }
   });
 
