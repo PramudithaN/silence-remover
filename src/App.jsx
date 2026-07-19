@@ -24,8 +24,8 @@ export default function App() {
         {/* Tech Node Boxed Header */}
         <Box
           sx={{
-            background: '#121620',
-            border: '1px solid #1E2638',
+            background: '#1E1E24',
+            border: '1px solid #2F2F38',
             borderRadius: '12px',
             p: '20px 24px',
             mb: 3,
@@ -43,7 +43,7 @@ export default function App() {
                 width: 44,
                 height: 44,
                 borderRadius: '8px',
-                background: '#181E2C',
+                background: '#262630',
                 border: '1px solid #00E5FF',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -117,8 +117,8 @@ export default function App() {
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             gap: 1,
-            background: '#121620',
-            border: '1px solid #1E2638',
+            background: '#1E1E24',
+            border: '1px solid #2F2F38',
             borderRadius: '10px',
             p: '5px',
             mb: 3,
@@ -138,11 +138,11 @@ export default function App() {
               justifyContent: 'center',
               gap: 1,
               color: activeTab === 0 ? '#00E5FF' : 'text.secondary',
-              background: activeTab === 0 ? '#1A2130' : 'transparent',
+              background: activeTab === 0 ? '#262630' : 'transparent',
               border: activeTab === 0 ? '1px solid #00E5FF' : '1px solid transparent',
               transition: 'all 0.15s ease',
               '&:hover': {
-                background: activeTab === 0 ? '#1A2130' : 'rgba(255, 255, 255, 0.03)',
+                background: activeTab === 0 ? '#262630' : 'rgba(255, 255, 255, 0.03)',
               },
             }}
           >
@@ -164,11 +164,11 @@ export default function App() {
               justifyContent: 'center',
               gap: 1,
               color: activeTab === 1 ? '#A855F7' : 'text.secondary',
-              background: activeTab === 1 ? '#201A30' : 'transparent',
+              background: activeTab === 1 ? '#2E2638' : 'transparent',
               border: activeTab === 1 ? '1px solid #A855F7' : '1px solid transparent',
               transition: 'all 0.15s ease',
               '&:hover': {
-                background: activeTab === 1 ? '#201A30' : 'rgba(255, 255, 255, 0.03)',
+                background: activeTab === 1 ? '#2E2638' : 'rgba(255, 255, 255, 0.03)',
               },
             }}
           >

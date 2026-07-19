@@ -39,8 +39,8 @@ export default function SettingsCard({ settings, onChange }) {
   return (
     <Box
       sx={{
-        background: '#121620',
-        border: '1px solid #1E2638',
+        background: '#1E1E24',
+        border: '1px solid #2F2F38',
         borderRadius: '12px',
         p: '20px 22px',
       }}
@@ -62,7 +62,7 @@ export default function SettingsCard({ settings, onChange }) {
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
         {SETTINGS_CONFIG.map(({ key, label, Icon, min, max, step, format, hint }) => (
-          <Box key={key} sx={{ background: '#0E121B', border: '1px solid #1A2130', borderRadius: '8px', p: 2 }}>
+          <Box key={key} sx={{ background: '#18181D', border: '1px solid #2A2A33', borderRadius: '8px', p: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Icon sx={{ fontSize: 16, color: '#94A3B8' }} />

@@ -34,9 +34,9 @@ export const theme = createTheme({
     },
     background: {
       default: '#141414',
-      paper: '#121620',
+      paper: '#1E1E24',
     },
-    divider: '#1E2638',
+    divider: '#2F2F38',
     text: {
       primary: '#F1F5F9',
       secondary: '#94A3B8',

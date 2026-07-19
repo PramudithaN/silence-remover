@@ -169,7 +169,7 @@ export default function VideoBatchReview({
       {/* Node Studio Header Box */}
       <Box
         sx={{
-          background: '#121620',
+          background: '#1E1E24',
           border: '1px solid #A855F7',
           borderRadius: '12px',
           p: '20px 24px',
@@ -204,8 +204,8 @@ export default function VideoBatchReview({
             justifyContent: 'center',
             textTransform: 'none',
             fontWeight: 700,
-            borderColor: '#1E2638',
-            background: '#181E2C',
+            borderColor: '#2F2F38',
+            background: '#262630',
             color: '#A855F7',
             '&:hover': { borderColor: '#A855F7', background: 'rgba(168,85,247,0.1)' },
           }}
@@ -239,11 +239,11 @@ export default function VideoBatchReview({
                 borderRadius: '8px',
                 cursor: 'pointer',
                 border: '1px solid',
-                borderColor: isSelected ? '#00E5FF' : '#1E2638',
-                background: isSelected ? '#1A2130' : '#121620',
+                borderColor: isSelected ? '#00E5FF' : '#2F2F38',
+                background: isSelected ? '#262630' : '#1E1E24',
                 transition: 'all 0.15s ease',
                 minWidth: 'fit-content',
-                '&:hover': { background: '#1A2130' },
+                '&:hover': { background: '#262630' },
               }}
             >
               <Movie sx={{ fontSize: 16, color: isSelected ? '#00E5FF' : '#475569' }} />
@@ -292,10 +292,10 @@ export default function VideoBatchReview({
           {/* Video Player Box */}
           <Box
             sx={{
-              background: '#090B0E',
+              background: '#141418',
               borderRadius: '10px',
               overflow: 'hidden',
-              border: '1px solid #1E2638',
+              border: '1px solid #2F2F38',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -313,8 +313,8 @@ export default function VideoBatchReview({
           {/* Controls Node Panel */}
           <Box
             sx={{
-              background: '#121620',
-              border: '1px solid #1E2638',
+              background: '#1E1E24',
+              border: '1px solid #2F2F38',
               borderRadius: '10px',
               p: '18px 20px',
               display: 'flex',
@@ -364,7 +364,7 @@ export default function VideoBatchReview({
               </Box>
             </Box>
 
-            <Box sx={{ background: '#0E121B', border: '1px solid #1E2638', borderRadius: '6px', p: 1.2 }}>
+            <Box sx={{ background: '#18181D', border: '1px solid #2F2F38', borderRadius: '6px', p: 1.2 }}>
               <Typography variant="body2" fontWeight={700} noWrap color="#F1F5F9">
                 {activeItem.file.name}
               </Typography>
@@ -379,8 +379,8 @@ export default function VideoBatchReview({
       {/* Waveform Box */}
       <Box
         sx={{
-          background: '#121620',
-          border: '1px solid #1E2638',
+          background: '#1E1E24',
+          border: '1px solid #2F2F38',
           borderRadius: '10px',
           p: '18px 20px',
         }}
@@ -405,19 +405,19 @@ export default function VideoBatchReview({
           </Box>
         </Box>
 
-        <Box ref={waveformRef} sx={{ cursor: 'pointer', borderRadius: '6px', overflow: 'hidden', background: '#090B0E', border: '1px solid #1A2130' }} />
+        <Box ref={waveformRef} sx={{ cursor: 'pointer', borderRadius: '6px', overflow: 'hidden', background: '#141418', border: '1px solid #2A2A33' }} />
       </Box>
 
       {/* Segments Inspector List */}
       <Box
         sx={{
-          background: '#121620',
-          border: '1px solid #1E2638',
+          background: '#1E1E24',
+          border: '1px solid #2F2F38',
           borderRadius: '10px',
           overflow: 'hidden',
         }}
       >
-        <Box sx={{ px: 2.5, py: 1.5, borderBottom: '1px solid #1E2638', background: '#0E121B' }}>
+        <Box sx={{ px: 2.5, py: 1.5, borderBottom: '1px solid #2F2F38', background: '#18181D' }}>
           <Typography variant="subtitle2" fontWeight={700} color="#F1F5F9">
             Detected Silence Segments ({activeItem?.segments.length || 0})
           </Typography>

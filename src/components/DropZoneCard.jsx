@@ -17,8 +17,8 @@ export default function DropZoneCard({ onFilesSelected, files }) {
   return (
     <Box
       sx={{
-        background: '#121620',
-        border: '1px solid #1E2638',
+        background: '#1E1E24',
+        border: '1px solid #2F2F38',
         borderRadius: '12px',
         p: '20px 22px',
         position: 'relative',
@@ -52,12 +52,12 @@ export default function DropZoneCard({ onFilesSelected, files }) {
         sx={{
           position: 'relative',
           border: '1.5px dashed',
-          borderColor: dragging ? '#00E5FF' : '#1E2638',
+          borderColor: dragging ? '#00E5FF' : '#2F2F38',
           borderRadius: '8px',
           p: '40px 24px 36px',
           textAlign: 'center',
           cursor: 'pointer',
-          bgcolor: dragging ? 'rgba(0,229,255,0.06)' : '#0E121B',
+          bgcolor: dragging ? 'rgba(0,229,255,0.06)' : '#18181D',
           transition: 'all 0.15s ease',
           '&:hover': { borderColor: '#00E5FF', bgcolor: 'rgba(0,229,255,0.03)' },
         }}
@@ -77,8 +77,8 @@ export default function DropZoneCard({ onFilesSelected, files }) {
             width: 50,
             height: 50,
             borderRadius: '8px',
-            background: '#161C2A',
-            border: '1px solid #1E2638',
+            background: '#262630',
+            border: '1px solid #2F2F38',
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',

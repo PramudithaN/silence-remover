@@ -18,7 +18,7 @@ export default function VideoProcessingCard({ batchItems, currentlyProcessingIte
   return (
     <Box
       sx={{
-        background: '#121620',
+        background: '#1E1E24',
         border: '1px solid #00E5FF',
         borderRadius: '12px',
         p: '28px 28px',

@@ -75,7 +75,7 @@ export default function VideoResultDownloadCard({ batchItems, onReset }) {
       {/* Node Header Completion Box */}
       <Box
         sx={{
-          background: '#121620',
+          background: '#1E1E24',
           border: '1px solid #10B981',
           borderRadius: '12px',
           p: '28px 24px',
@@ -116,8 +116,8 @@ export default function VideoResultDownloadCard({ batchItems, onReset }) {
       {completedItems.length > 1 && (
         <Box
           sx={{
-            background: '#121620',
-            border: '1px solid #1E2638',
+            background: '#1E1E24',
+            border: '1px solid #2F2F38',
             borderRadius: '12px',
             p: 2.5,
             width: '100%',
@@ -170,21 +170,21 @@ export default function VideoResultDownloadCard({ batchItems, onReset }) {
       {/* Per File Download List */}
       <Box
         sx={{
-          background: '#121620',
-          border: '1px solid #1E2638',
+          background: '#1E1E24',
+          border: '1px solid #2F2F38',
           borderRadius: '12px',
           width: '100%',
           overflow: 'hidden',
           textAlign: 'left',
         }}
       >
-        <Box sx={{ px: 2.5, py: 1.5, borderBottom: '1px solid #1E2638', background: '#0E121B' }}>
+        <Box sx={{ px: 2.5, py: 1.5, borderBottom: '1px solid #2F2F38', background: '#18181D' }}>
           <Typography variant="subtitle2" fontWeight={700} color="#F1F5F9">
             Processed Video Streams
           </Typography>
         </Box>
 
-        <Stack divide={<Box sx={{ borderBottom: '1px solid #1A2130' }} />}>
+        <Stack divide={<Box sx={{ borderBottom: '1px solid #2F2F38' }} />}>
           {batchItems.map((item, idx) => (
             <Box
               key={item.id}

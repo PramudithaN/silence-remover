@@ -5,8 +5,8 @@ import { fmtTime } from '../utils/audioUtils';
 
 export default function StatsRow({ stats }) {
   const items = [
-    { Icon: Schedule, value: fmtTime(stats.origSec), label: 'Original', color: '#94A3B8', bg: '#121620', border: '#1E2638' },
-    { Icon: Compress, value: fmtTime(stats.outSec), label: 'Output', color: '#00E5FF', bg: '#121620', border: '#1E2638' },
+    { Icon: Schedule, value: fmtTime(stats.origSec), label: 'Original', color: '#94A3B8', bg: '#1E1E24', border: '#2F2F38' },
+    { Icon: Compress, value: fmtTime(stats.outSec), label: 'Output', color: '#00E5FF', bg: '#1E1E24', border: '#2F2F38' },
     { Icon: Bolt, value: fmtTime(stats.saved), label: 'Time Saved', color: '#10B981', bg: 'rgba(16,185,129,0.08)', border: '#10B981' },
   ];
 

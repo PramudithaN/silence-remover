@@ -4,8 +4,8 @@ import { QueueMusic, AudioFile, Sync, CheckCircle, Cancel, Download } from '@mui
 import { fmtBytes, shortName } from '../utils/audioUtils';
 
 const STATE_CFG = {
-  queued: { label: 'QUEUED', iconName: 'audio', color: '#475569', bg: '#0E121B', border: '#1E2638' },
-  processing: { label: 'PROCESSING', iconName: 'sync', color: '#00E5FF', bg: '#162335', border: '#00E5FF' },
+  queued: { label: 'QUEUED', iconName: 'audio', color: '#475569', bg: '#18181D', border: '#2F2F38' },
+  processing: { label: 'PROCESSING', iconName: 'sync', color: '#00E5FF', bg: '#262630', border: '#00E5FF' },
   done: { label: 'COMPLETE', iconName: 'check', color: '#10B981', bg: 'rgba(16,185,129,0.1)', border: '#10B981' },
   error: { label: 'FAILED', iconName: 'cancel', color: '#EF4444', bg: 'rgba(239,68,68,0.1)', border: '#EF4444' },
 };
@@ -22,8 +22,8 @@ export default function FileQueueCard({ files, itemStates, outputBlobs, onDownlo
   return (
     <Box
       sx={{
-        background: '#121620',
-        border: '1px solid #1E2638',
+        background: '#1E1E24',
+        border: '1px solid #2F2F38',
         borderRadius: '12px',
         p: '20px 22px',
       }}

@@ -45,8 +45,8 @@ export default function WaveformCard({ waveformData }) {
   return (
     <Box
       sx={{
-        background: '#121620',
-        border: '1px solid #1E2638',
+        background: '#1E1E24',
+        border: '1px solid #2F2F38',
         borderRadius: '12px',
         p: '20px 22px',
       }}
@@ -69,7 +69,7 @@ export default function WaveformCard({ waveformData }) {
         </Typography>
       </Box>
 
-      <Box sx={{ borderRadius: '6px', overflow: 'hidden', bgcolor: '#090B0E', border: '1px solid #1A2130' }}>
+      <Box sx={{ borderRadius: '6px', overflow: 'hidden', bgcolor: '#141418', border: '1px solid #2A2A33' }}>
         <canvas
           ref={canvasRef}
           height={72}

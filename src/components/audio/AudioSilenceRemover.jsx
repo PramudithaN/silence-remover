@@ -156,7 +156,7 @@ export default function AudioSilenceRemover() {
       {showProgress && (
         <Box
           sx={{
-            background: '#121620',
+            background: '#1E1E24',
             border: '1px solid #00E5FF',
             borderRadius: '10px',
             p: '18px 22px',

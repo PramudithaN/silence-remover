@@ -23,8 +23,8 @@ export default function VideoUploaderCard({ onFilesSelected }) {
   return (
     <Box
       sx={{
-        background: '#121620',
-        border: '1px solid #1E2638',
+        background: '#1E1E24',
+        border: '1px solid #2F2F38',
         borderRadius: '12px',
         p: '20px 22px',
         position: 'relative',
@@ -61,12 +61,12 @@ export default function VideoUploaderCard({ onFilesSelected }) {
         sx={{
           position: 'relative',
           border: '1.5px dashed',
-          borderColor: dragging ? '#A855F7' : '#1E2638',
+          borderColor: dragging ? '#A855F7' : '#2F2F38',
           borderRadius: '8px',
           p: '40px 24px 36px',
           textAlign: 'center',
           cursor: 'pointer',
-          bgcolor: dragging ? 'rgba(168,85,247,0.06)' : '#0E121B',
+          bgcolor: dragging ? 'rgba(168,85,247,0.06)' : '#18181D',
           transition: 'all 0.15s ease',
           '&:hover': { borderColor: '#A855F7', bgcolor: 'rgba(168,85,247,0.03)' },
         }}
