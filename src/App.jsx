@@ -13,6 +13,8 @@ export default function App() {
     <Box
       sx={{
         background: '#141414',
+        backgroundImage: 'radial-gradient(#272E3F 1px, transparent 1px)',
+        backgroundSize: '24px 24px',
         minHeight: '100vh',
         pb: 8,
         position: 'relative',
