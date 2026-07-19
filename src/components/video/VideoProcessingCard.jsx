@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, LinearProgress, Stack } from '@mui/material';
-import { Movie, AutoFixHigh } from '@mui/icons-material';
+import { AutoFixHigh } from '@mui/icons-material';
 
 export default function VideoProcessingCard({ batchItems, currentlyProcessingItem }) {
   const completedCount = batchItems.filter((i) => i.status === 'done').length;
@@ -9,8 +9,8 @@ export default function VideoProcessingCard({ batchItems, currentlyProcessingIte
   const stage = currentlyProcessingItem?.progress?.stage || 'trimming';
 
   const stageLabelMap = {
-    'loading-engine': 'Initializing FFmpeg Video Engine…',
-    trimming: `Trimming frame-accurate cuts (${progressPercent}%)`,
+    'loading-engine': 'Initializing FFmpeg WASM Core Engine…',
+    trimming: `Trimming frame-accurate segments (${progressPercent}%)`,
     concatenating: 'Stitching video segments together…',
     done: 'Finished processing clip!',
   };
@@ -18,65 +18,59 @@ export default function VideoProcessingCard({ batchItems, currentlyProcessingIte
   return (
     <Box
       sx={{
-        background: 'rgba(255,255,255,0.04)',
-        backdropFilter: 'blur(20px)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        borderRadius: 2,
-        p: '24px 28px',
-        boxShadow: '0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06)',
+        background: '#121620',
+        border: '1px solid #00E5FF',
+        borderRadius: '12px',
+        p: '28px 28px',
+        position: 'relative',
       }}
     >
-      <Stack spacing={2} alignItems="center" textAlign="center">
+      <Stack spacing={2.5} alignItems="center" textAlign="center">
         <Box
           sx={{
-            width: 60,
-            height: 60,
-            borderRadius: '50%',
-            background: 'rgba(255,255,255,0.08)',
-            border: '1px solid rgba(255,255,255,0.16)',
-            display: 'flex',
+            width: 54,
+            height: 54,
+            borderRadius: '8px',
+            background: '#162335',
+            border: '1px solid #00E5FF',
+            display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: 'primary.main',
-            animation: 'pulse 2s infinite',
-            '@keyframes pulse': {
-              '0%, 100%': { transform: 'scale(1)', opacity: 1 },
-              '50%': { transform: 'scale(1.08)', opacity: 0.8 },
-            },
+            color: '#00E5FF',
           }}
         >
-          <AutoFixHigh sx={{ fontSize: 30 }} />
+          <AutoFixHigh sx={{ fontSize: 26, display: 'block' }} />
         </Box>
 
         <Box>
-          <Typography variant="h6" fontWeight={700}>
+          <Typography variant="h6" fontWeight={700} color="#F1F5F9">
             Processing Video Batch ({completedCount} / {totalCount} Complete)
           </Typography>
           {currentlyProcessingItem ? (
-            <Typography variant="body2" color="primary.main" fontWeight={600} sx={{ mt: 0.5 }}>
-              Currently cutting: {currentlyProcessingItem.file.name}
+            <Typography variant="caption" color="#00E5FF" fontWeight={700} sx={{ mt: 0.5, display: 'block', fontFamily: '"JetBrains Mono", monospace' }}>
+              CURRENT_CLIP :: {currentlyProcessingItem.file.name}
             </Typography>
           ) : (
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-              Preparing video files for processing…
+            <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block', fontFamily: '"JetBrains Mono", monospace' }}>
+              Preparing video files for execution…
             </Typography>
           )}
         </Box>
 
         <Box sx={{ width: '100%', mt: 1 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="caption" color="text.secondary" sx={{ fontFamily: '"JetBrains Mono", monospace' }}>
               {stageLabelMap[stage] || 'Processing video…'}
             </Typography>
-            <Typography variant="body2" fontWeight={700} color="primary.main">
+            <Typography variant="caption" fontWeight={700} color="#00E5FF" sx={{ fontFamily: '"JetBrains Mono", monospace' }}>
               {progressPercent}%
             </Typography>
           </Box>
-          <LinearProgress variant="determinate" value={progressPercent} sx={{ height: 8, borderRadius: 4 }} />
+          <LinearProgress variant="determinate" value={progressPercent} sx={{ height: 6, borderRadius: 3 }} />
         </Box>
 
-        <Typography variant="caption" color="text.disabled">
-          ⚡ All video cutting happens 100% client-side inside your browser via WebAssembly.
+        <Typography variant="caption" color="text.disabled" sx={{ fontSize: '0.68rem', fontFamily: '"JetBrains Mono", monospace' }}>
+          [NODE: FFMPEG_WASM] All video cutting runs 100% client-side inside WebAssembly.
         </Typography>
       </Stack>
     </Box>

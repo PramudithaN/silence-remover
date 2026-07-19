@@ -23,30 +23,33 @@ export default function VideoUploaderCard({ onFilesSelected }) {
   return (
     <Box
       sx={{
-        background: 'rgba(255,255,255,0.04)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        borderRadius: 2,
+        background: '#121620',
+        border: '1px solid #1E2638',
+        borderRadius: '12px',
         p: '20px 22px',
-        boxShadow: '0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06)',
+        position: 'relative',
       }}
     >
-      {/* Card Header */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-        <UploadFile sx={{ fontSize: 15, color: 'text.disabled' }} />
-        <Typography
-          variant="caption"
-          fontWeight={600}
-          textTransform="uppercase"
-          letterSpacing={0.7}
-          color="text.disabled"
-        >
-          Select Video Files
+      {/* Node Tag Header */}
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <UploadFile sx={{ fontSize: 16, color: '#A855F7' }} />
+          <Typography
+            variant="caption"
+            fontWeight={700}
+            textTransform="uppercase"
+            letterSpacing={0.8}
+            sx={{ color: '#A855F7', fontFamily: '"JetBrains Mono", monospace' }}
+          >
+            [INPUT_NODE] VIDEO_CLIPS
+          </Typography>
+        </Box>
+        <Typography variant="caption" sx={{ color: '#475569', fontSize: '0.65rem' }}>
+          BATCH_VIDEO_INGEST
         </Typography>
       </Box>
 
-      {/* Drop Zone */}
+      {/* Drop Zone Box */}
       <Box
         onClick={() => inputRef.current?.click()}
         onDragOver={(e) => {
@@ -58,15 +61,14 @@ export default function VideoUploaderCard({ onFilesSelected }) {
         sx={{
           position: 'relative',
           border: '1.5px dashed',
-          borderColor: dragging ? 'primary.main' : 'rgba(255,255,255,0.09)',
-          borderRadius: 2,
-          p: '44px 24px 40px',
+          borderColor: dragging ? '#A855F7' : '#1E2638',
+          borderRadius: '8px',
+          p: '40px 24px 36px',
           textAlign: 'center',
           cursor: 'pointer',
-          bgcolor: dragging ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.02)',
-          transition: 'all 0.2s',
-          boxShadow: dragging ? '0 0 0 4px rgba(255,255,255,0.12)' : 'none',
-          '&:hover': { borderColor: 'primary.main', bgcolor: 'rgba(255,255,255,0.04)' },
+          bgcolor: dragging ? 'rgba(168,85,247,0.06)' : '#0E121B',
+          transition: 'all 0.15s ease',
+          '&:hover': { borderColor: '#A855F7', bgcolor: 'rgba(168,85,247,0.03)' },
         }}
       >
         <input
@@ -86,55 +88,48 @@ export default function VideoUploaderCard({ onFilesSelected }) {
         {/* Icon */}
         <Box
           sx={{
-            width: 56,
-            height: 56,
-            borderRadius: '50%',
-            background: 'rgba(255,255,255,0.08)',
-            border: '1px solid rgba(255,255,255,0.16)',
-            display: 'flex',
+            width: 50,
+            height: 50,
+            borderRadius: '8px',
+            background: '#1D172A',
+            border: '1px solid #2D1F42',
+            display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: 'primary.main',
+            color: '#A855F7',
             mx: 'auto',
             mb: 2,
           }}
         >
-          <Movie sx={{ fontSize: 28 }} />
+          <Movie sx={{ fontSize: 24, display: 'block' }} />
         </Box>
 
-        <Typography fontWeight={600} mb={0.5}>
-          Drop video files here
+        <Typography fontWeight={700} mb={0.5} color="#F1F5F9">
+          Drop video clips to ingest
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.78rem' }}>
           or{' '}
-          <Box component="span" color="primary.main" fontWeight={600}>
+          <Box component="span" color="#A855F7" fontWeight={700}>
             click to browse
           </Box>
-          {' '} single clip or batch upload supported
+          {' '}— single clip or batch video processing
         </Typography>
 
         {/* Formats */}
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 0.75,
-            flexWrap: 'wrap',
-            justify: 'center',
-            mt: 2,
-          }}
-        >
+        <Box sx={{ display: 'flex', gap: 0.75, flexWrap: 'wrap', justifyContent: 'center', mt: 2 }}>
           {VIDEO_FORMATS.map((f) => (
             <Box
               key={f}
               sx={{
-                fontSize: '0.67rem',
+                fontSize: '0.65rem',
+                fontFamily: '"JetBrains Mono", monospace',
                 fontWeight: 700,
                 px: 1.2,
-                py: 0.5,
-                borderRadius: '6px',
-                bgcolor: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.10)',
-                color: 'text.secondary',
+                py: 0.4,
+                borderRadius: '4px',
+                bgcolor: '#141A26',
+                border: '1px solid #1E2638',
+                color: '#94A3B8',
               }}
             >
               {f}

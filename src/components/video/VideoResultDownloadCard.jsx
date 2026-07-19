@@ -71,43 +71,41 @@ export default function VideoResultDownloadCard({ batchItems, onReset }) {
   };
 
   return (
-    <Stack spacing={3} alignItems="center" textAlign="center">
-      {/* Header Completion Card */}
+    <Stack spacing={2.5} alignItems="center" textAlign="center">
+      {/* Node Header Completion Box */}
       <Box
         sx={{
-          background: 'rgba(52,211,153,0.06)',
-          border: '1px solid rgba(52,211,153,0.25)',
-          borderRadius: 3,
-          p: '32px 24px',
+          background: '#121620',
+          border: '1px solid #10B981',
+          borderRadius: '12px',
+          p: '28px 24px',
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: 1.5,
-          boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
         }}
       >
         <Box
           sx={{
-            width: 56,
-            height: 56,
-            borderRadius: '50%',
-            bgcolor: 'rgba(52,211,153,0.15)',
-            border: '1px solid rgba(52,211,153,0.35)',
+            width: 52,
+            height: 52,
+            borderRadius: '8px',
+            bgcolor: 'rgba(16, 185, 129, 0.12)',
+            border: '1px solid #10B981',
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#34D399',
-            boxShadow: '0 0 16px rgba(52,211,153,0.2)',
+            color: '#10B981',
           }}
         >
-          <CheckCircle sx={{ fontSize: 32, display: 'block' }} />
+          <CheckCircle sx={{ fontSize: 28, display: 'block' }} />
         </Box>
         <Box>
-          <Typography variant="h5" fontWeight={700} color="text.primary" sx={{ lineHeight: 1.25 }}>
-            Video Batch Processing Complete!
+          <Typography variant="h6" fontWeight={700} color="#F1F5F9" sx={{ lineHeight: 1.25 }}>
+            Batch Video Output Ready
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+          <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block', fontFamily: '"JetBrains Mono", monospace' }}>
             Successfully trimmed <strong>{completedItems.length}</strong> of{' '}
             {batchItems.length} videos.
           </Typography>
@@ -118,11 +116,10 @@ export default function VideoResultDownloadCard({ batchItems, onReset }) {
       {completedItems.length > 1 && (
         <Box
           sx={{
-            background: 'rgba(255,255,255,0.04)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: 3,
-            p: 3,
+            background: '#121620',
+            border: '1px solid #1E2638',
+            borderRadius: '12px',
+            p: 2.5,
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
@@ -130,7 +127,7 @@ export default function VideoResultDownloadCard({ batchItems, onReset }) {
             gap: 1.5,
           }}
         >
-          <Typography variant="subtitle2" fontWeight={700} color="text.primary">
+          <Typography variant="subtitle2" fontWeight={700} color="#F1F5F9">
             Download all trimmed videos in a single ZIP archive
           </Typography>
           {isZipping ? (
@@ -139,7 +136,7 @@ export default function VideoResultDownloadCard({ batchItems, onReset }) {
               size="large"
               disabled
               startIcon={<CircularProgress size={18} color="inherit" />}
-              sx={{ textTransform: 'none', fontWeight: 600 }}
+              sx={{ textTransform: 'none', fontWeight: 700 }}
             >
               Packaging ZIP Archive…
             </Button>
@@ -147,18 +144,21 @@ export default function VideoResultDownloadCard({ batchItems, onReset }) {
             <Button
               variant="contained"
               size="large"
-              startIcon={<FolderZip sx={{ fontSize: 20, display: 'block' }} />}
+              startIcon={<FolderZip sx={{ fontSize: 18, display: 'block' }} />}
               component="a"
               href={zipUrl}
               download="silence_removed_videos.zip"
               sx={{
-                py: 1.4,
+                py: 1.2,
                 px: 4,
                 fontWeight: 700,
                 textTransform: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                background: '#A855F7',
+                color: '#ffffff',
+                '&:hover': { background: '#C084FC' },
               }}
             >
               Download All (.zip)
@@ -170,22 +170,21 @@ export default function VideoResultDownloadCard({ batchItems, onReset }) {
       {/* Per File Download List */}
       <Box
         sx={{
-          background: 'rgba(255,255,255,0.04)',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: 3,
+          background: '#121620',
+          border: '1px solid #1E2638',
+          borderRadius: '12px',
           width: '100%',
           overflow: 'hidden',
           textAlign: 'left',
         }}
       >
-        <Box sx={{ px: 2.5, py: 1.8, borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)' }}>
-          <Typography variant="subtitle2" fontWeight={700} color="text.primary">
-            Processed Videos
+        <Box sx={{ px: 2.5, py: 1.5, borderBottom: '1px solid #1E2638', background: '#0E121B' }}>
+          <Typography variant="subtitle2" fontWeight={700} color="#F1F5F9">
+            Processed Video Streams
           </Typography>
         </Box>
 
-        <Stack divide={<Box sx={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }} />}>
+        <Stack divide={<Box sx={{ borderBottom: '1px solid #1A2130' }} />}>
           {batchItems.map((item, idx) => (
             <Box
               key={item.id}
@@ -194,13 +193,13 @@ export default function VideoResultDownloadCard({ batchItems, onReset }) {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 px: 2.5,
-                py: 1.6,
+                py: 1.4,
                 gap: 2,
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, overflow: 'hidden', minWidth: 0 }}>
-                <Movie sx={{ fontSize: 18, color: 'text.disabled', flexShrink: 0, display: 'block' }} />
-                <Typography variant="body2" fontWeight={600} noWrap color="text.primary" sx={{ lineHeight: 1.3 }}>
+                <Movie sx={{ fontSize: 18, color: '#475569', flexShrink: 0, display: 'block' }} />
+                <Typography variant="body2" fontWeight={600} noWrap color="#F1F5F9" sx={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.82rem' }}>
                   #{idx + 1} {item.file.name}
                 </Typography>
               </Box>
@@ -210,19 +209,22 @@ export default function VideoResultDownloadCard({ batchItems, onReset }) {
                   <Button
                     variant="outlined"
                     size="small"
-                    startIcon={<Download sx={{ fontSize: 16, display: 'block' }} />}
+                    startIcon={<Download sx={{ fontSize: 15, display: 'block' }} />}
                     onClick={() => downloadSingle(item)}
                     sx={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      justify: 'center',
+                      justifyContent: 'center',
                       textTransform: 'none',
-                      borderColor: 'rgba(52,211,153,0.35)',
-                      color: '#34D399',
+                      borderColor: '#10B981',
+                      color: '#10B981',
+                      background: 'rgba(16,185,129,0.06)',
                       fontWeight: 700,
-                      py: 0.7,
-                      px: 2,
-                      '&:hover': { background: 'rgba(52,211,153,0.12)', borderColor: '#34D399' },
+                      py: 0.6,
+                      px: 1.8,
+                      fontSize: '0.78rem',
+                      fontFamily: '"JetBrains Mono", monospace',
+                      '&:hover': { background: 'rgba(16,185,129,0.15)', borderColor: '#34D399' },
                     }}
                   >
                     Download MP4
@@ -244,19 +246,20 @@ export default function VideoResultDownloadCard({ batchItems, onReset }) {
       <Button
         variant="outlined"
         size="large"
-        startIcon={<RestartAlt sx={{ fontSize: 20, display: 'block' }} />}
+        startIcon={<RestartAlt sx={{ fontSize: 18, display: 'block' }} />}
         onClick={onReset}
         sx={{
-          py: 1.4,
+          py: 1.2,
           px: 4,
-          fontWeight: 600,
+          fontWeight: 700,
           textTransform: 'none',
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
-          borderColor: 'rgba(255,255,255,0.2)',
+          borderColor: '#1E2638',
+          background: '#121620',
           color: 'text.secondary',
-          '&:hover': { borderColor: 'rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.05)' },
+          '&:hover': { borderColor: '#94A3B8', background: '#1A2130' },
         }}
       >
         Process New Batch

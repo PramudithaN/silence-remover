@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Box, Container, Typography, Button, Paper,
+  Box, Container, Typography, Button, Paper, Chip,
 } from '@mui/material';
 import { GraphicEq, Movie, Lock } from '@mui/icons-material';
 import AudioSilenceRemover from './components/audio/AudioSilenceRemover';
@@ -12,64 +12,29 @@ export default function App() {
   return (
     <Box
       sx={{
-        background: 'linear-gradient(160deg, #0A0A0A 0%, #111118 55%, #0A0A0A 100%)',
+        background: '#0B0D12',
+        backgroundImage: 'radial-gradient(#1E2638 1px, transparent 1px)',
+        backgroundSize: '24px 24px',
         minHeight: '100vh',
         pb: 8,
         position: 'relative',
-        overflow: 'hidden',
       }}
     >
-      {/* Ambient color Orbs */}
-      <Box
-        sx={{
-          position: 'fixed',
-          top: '-15%',
-          left: '-8%',
-          width: 620,
-          height: 620,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 65%)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: '-18%',
-          right: '-8%',
-          width: 660,
-          height: 660,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(226,232,240,0.05) 0%, transparent 65%)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-      <Box
-        sx={{
-          position: 'fixed',
-          top: '38%',
-          right: '14%',
-          width: 360,
-          height: 360,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(241,245,249,0.04) 0%, transparent 65%)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
-      <Container maxWidth="md" sx={{ px: { xs: 2, sm: 3 }, position: 'relative', zIndex: 1 }}>
-        {/* Main Header */}
+      <Container maxWidth="md" sx={{ px: { xs: 2, sm: 3 }, pt: 4 }}>
+        {/* Tech Node Boxed Header */}
         <Box
           sx={{
+            background: '#121620',
+            border: '1px solid #1E2638',
+            borderRadius: '12px',
+            p: '20px 24px',
+            mb: 3,
             display: 'flex',
             flexDirection: { xs: 'column', sm: 'row' },
             alignItems: { xs: 'flex-start', sm: 'center' },
             justifyContent: 'space-between',
-            py: 4,
             gap: 2,
+            position: 'relative',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -77,14 +42,13 @@ export default function App() {
               sx={{
                 width: 44,
                 height: 44,
-                borderRadius: '12px',
-                background: 'rgba(255,255,255,0.07)',
-                border: '1px solid rgba(255,255,255,0.18)',
+                borderRadius: '8px',
+                background: '#181E2C',
+                border: '1px solid #00E5FF',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'primary.main',
-                boxShadow: '0 2px 12px rgba(255,255,255,0.06)',
+                color: '#00E5FF',
                 flexShrink: 0,
               }}
             >
@@ -98,19 +62,19 @@ export default function App() {
               <Typography
                 variant="h6"
                 fontWeight={700}
-                letterSpacing="-0.4px"
-                sx={{ lineHeight: 1.2, mb: 0.2 }}
+                letterSpacing="-0.3px"
+                sx={{ lineHeight: 1.2, mb: 0.2, color: '#F1F5F9' }}
               >
-                Silence Remover
+                Silence Remover Studio
               </Typography>
               <Typography
                 variant="caption"
                 color="text.secondary"
-                sx={{ lineHeight: 1.2, display: 'block' }}
+                sx={{ lineHeight: 1.2, display: 'block', fontFamily: '"JetBrains Mono", monospace' }}
               >
                 {activeTab === 0
-                  ? 'Strip silence from audio files in bulk'
-                  : 'Detect and trim silent parts in video clips'}
+                  ? '[ENGINE: WEB_AUDIO_API] Strip silence from audio in bulk'
+                  : '[ENGINE: FFMPEG_WASM] Detect & cut silent video frames'}
               </Typography>
             </Box>
           </Box>
@@ -120,50 +84,44 @@ export default function App() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: 1,
-              background: 'linear-gradient(135deg, rgba(52,211,153,0.18) 0%, rgba(16,185,129,0.10) 100%)',
-              border: '1px solid rgba(52,211,153,0.40)',
-              backdropFilter: 'blur(12px)',
-              borderRadius: '20px',
-              px: 2,
-              py: 1,
-              boxShadow: '0 0 16px rgba(52,211,153,0.20), inset 0 1px 0 rgba(255,255,255,0.06)',
+              background: 'rgba(16, 185, 129, 0.08)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
+              borderRadius: '6px',
+              px: 1.5,
+              py: 0.8,
             }}
           >
             <Box
               sx={{
-                width: 8,
-                height: 8,
+                width: 6,
+                height: 6,
                 borderRadius: '50%',
-                bgcolor: '#34D399',
-                boxShadow: '0 0 6px #34D399',
+                bgcolor: '#10B981',
                 flexShrink: 0,
-                animation: 'pulse 2s ease-in-out infinite',
-                '@keyframes pulse': { '0%,100%': { opacity: 1 }, '50%': { opacity: 0.4 } },
               }}
             />
-            <Lock sx={{ fontSize: 13, color: '#34D399', display: 'block' }} />
+            <Lock sx={{ fontSize: 13, color: '#10B981', display: 'block' }} />
             <Typography
               variant="caption"
-              sx={{ color: '#34D399', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '0.02em', lineHeight: 1 }}
+              sx={{ color: '#10B981', fontWeight: 700, fontSize: '0.72rem', letterSpacing: '0.02em', lineHeight: 1 }}
             >
-              Runs 100% in your browser
+              100% LOCAL BROWSER PROCESSING
             </Typography>
           </Box>
         </Box>
 
-        {/* 2-Tab Navigation Segmented Control */}
+        {/* 2-Tab Navigation Segmented Node Control */}
         <Paper
           elevation={0}
           sx={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             gap: 1,
-            background: 'rgba(255, 255, 255, 0.04)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '14px',
+            background: '#121620',
+            border: '1px solid #1E2638',
+            borderRadius: '10px',
             p: '5px',
-            mb: 3.5,
+            mb: 3,
           }}
         >
           <Button
@@ -171,26 +129,25 @@ export default function App() {
             sx={{
               py: 1.2,
               px: 2,
-              borderRadius: '10px',
+              borderRadius: '6px',
               textTransform: 'none',
               fontWeight: 700,
-              fontSize: '0.9rem',
+              fontSize: '0.88rem',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: 1.2,
-              color: activeTab === 0 ? '#ffffff' : 'text.secondary',
-              background: activeTab === 0 ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
-              border: activeTab === 0 ? '1px solid rgba(255, 255, 255, 0.18)' : '1px solid transparent',
-              boxShadow: activeTab === 0 ? '0 4px 16px rgba(0,0,0,0.2)' : 'none',
-              transition: 'all 0.2s ease',
+              gap: 1,
+              color: activeTab === 0 ? '#00E5FF' : 'text.secondary',
+              background: activeTab === 0 ? '#1A2130' : 'transparent',
+              border: activeTab === 0 ? '1px solid #00E5FF' : '1px solid transparent',
+              transition: 'all 0.15s ease',
               '&:hover': {
-                background: activeTab === 0 ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.05)',
+                background: activeTab === 0 ? '#1A2130' : 'rgba(255, 255, 255, 0.03)',
               },
             }}
           >
-            <GraphicEq sx={{ fontSize: 20, display: 'block' }} />
-            Audio Silence Remover
+            <GraphicEq sx={{ fontSize: 18, display: 'block' }} />
+            AUDIO NODE
           </Button>
 
           <Button
@@ -198,26 +155,25 @@ export default function App() {
             sx={{
               py: 1.2,
               px: 2,
-              borderRadius: '10px',
+              borderRadius: '6px',
               textTransform: 'none',
               fontWeight: 700,
-              fontSize: '0.9rem',
+              fontSize: '0.88rem',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: 1.2,
-              color: activeTab === 1 ? '#ffffff' : 'text.secondary',
-              background: activeTab === 1 ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
-              border: activeTab === 1 ? '1px solid rgba(255, 255, 255, 0.18)' : '1px solid transparent',
-              boxShadow: activeTab === 1 ? '0 4px 16px rgba(0,0,0,0.2)' : 'none',
-              transition: 'all 0.2s ease',
+              gap: 1,
+              color: activeTab === 1 ? '#A855F7' : 'text.secondary',
+              background: activeTab === 1 ? '#201A30' : 'transparent',
+              border: activeTab === 1 ? '1px solid #A855F7' : '1px solid transparent',
+              transition: 'all 0.15s ease',
               '&:hover': {
-                background: activeTab === 1 ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.05)',
+                background: activeTab === 1 ? '#201A30' : 'rgba(255, 255, 255, 0.03)',
               },
             }}
           >
-            <Movie sx={{ fontSize: 20, display: 'block' }} />
-            Video Silence Remover
+            <Movie sx={{ fontSize: 18, display: 'block' }} />
+            VIDEO NODE
           </Button>
         </Paper>
 

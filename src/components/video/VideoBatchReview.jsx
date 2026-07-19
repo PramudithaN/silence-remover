@@ -11,7 +11,6 @@ import {
   FormControlLabel,
 } from '@mui/material';
 import {
-  VideoLibrary,
   Tune,
   GraphicEq,
   Delete,
@@ -90,8 +89,8 @@ export default function VideoBatchReview({
 
     const ws = WaveSurfer.create({
       container: waveformRef.current,
-      waveColor: 'rgba(255, 255, 255, 0.3)',
-      progressColor: '#38bdf8',
+      waveColor: '#475569',
+      progressColor: '#00E5FF',
       height: 85,
       normalize: true,
       plugins: [regions],
@@ -167,30 +166,28 @@ export default function VideoBatchReview({
 
   return (
     <Stack spacing={2.5}>
-      {/* Summary Header Card */}
+      {/* Node Studio Header Box */}
       <Box
         sx={{
-          background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(168, 85, 247, 0.15) 100%)',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(168, 85, 247, 0.3)',
-          borderRadius: 2,
+          background: '#121620',
+          border: '1px solid #A855F7',
+          borderRadius: '12px',
           p: '20px 24px',
           display: 'flex',
           flexDirection: { xs: 'column', sm: 'row' },
           alignItems: { xs: 'flex-start', sm: 'center' },
           justifyContent: 'space-between',
           gap: 2,
-          boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
         }}
       >
         <Box>
-          <Typography variant="h6" fontWeight={700} color="text.primary">
+          <Typography variant="h6" fontWeight={700} color="#F1F5F9">
             Batch Video Review ({batchItems.length}{' '}
             {batchItems.length === 1 ? 'Video' : 'Videos'})
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            Removing <strong>{totalSegmentsToRemove}</strong> silent parts across clips · Saving{' '}
-            <Box component="span" color="primary.main" fontWeight={700}>
+          <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block', fontFamily: '"JetBrains Mono", monospace' }}>
+            Removing <strong style={{ color: '#EF4444' }}>{totalSegmentsToRemove}</strong> silent parts · Saving{' '}
+            <Box component="span" color="#00E5FF" fontWeight={700}>
               {formatTime(totalSavedSeconds)}
             </Box>{' '}
             of {formatTime(totalBatchDuration)} total duration
@@ -204,12 +201,13 @@ export default function VideoBatchReview({
           sx={{
             display: 'inline-flex',
             alignItems: 'center',
-            justify: 'center',
+            justifyContent: 'center',
             textTransform: 'none',
-            fontWeight: 600,
-            borderColor: 'rgba(255,255,255,0.2)',
-            color: 'text.primary',
-            '&:hover': { borderColor: 'primary.main', background: 'rgba(255,255,255,0.08)' },
+            fontWeight: 700,
+            borderColor: '#1E2638',
+            background: '#181E2C',
+            color: '#A855F7',
+            '&:hover': { borderColor: '#A855F7', background: 'rgba(168,85,247,0.1)' },
           }}
         >
           Add More Videos
@@ -223,7 +221,7 @@ export default function VideoBatchReview({
         </Button>
       </Box>
 
-      {/* Video File Tabs */}
+      {/* Video Item Tabs */}
       <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 0.5 }}>
         {batchItems.map((item, idx) => {
           const removedCount = item.segments.filter((s) => s.keepForRemoval).length;
@@ -237,31 +235,31 @@ export default function VideoBatchReview({
                 alignItems: 'center',
                 gap: 1,
                 px: 2,
-                py: 1,
-                borderRadius: '10px',
+                py: 0.8,
+                borderRadius: '8px',
                 cursor: 'pointer',
                 border: '1px solid',
-                borderColor: isSelected ? 'primary.main' : 'rgba(255,255,255,0.1)',
-                background: isSelected ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.03)',
-                backdropFilter: 'blur(10px)',
-                transition: 'all 0.2s',
+                borderColor: isSelected ? '#00E5FF' : '#1E2638',
+                background: isSelected ? '#1A2130' : '#121620',
+                transition: 'all 0.15s ease',
                 minWidth: 'fit-content',
-                '&:hover': { background: 'rgba(255,255,255,0.08)' },
+                '&:hover': { background: '#1A2130' },
               }}
             >
-              <Movie sx={{ fontSize: 16, color: isSelected ? 'primary.main' : 'text.secondary' }} />
-              <Typography variant="body2" fontWeight={isSelected ? 700 : 500} noWrap sx={{ maxWidth: 160 }}>
+              <Movie sx={{ fontSize: 16, color: isSelected ? '#00E5FF' : '#475569' }} />
+              <Typography variant="body2" fontWeight={isSelected ? 700 : 500} noWrap sx={{ maxWidth: 150, fontFamily: '"JetBrains Mono", monospace', fontSize: '0.8rem' }}>
                 #{idx + 1} {item.file.name}
               </Typography>
               <Chip
                 label={removedCount}
                 size="small"
                 sx={{
-                  height: 20,
-                  fontSize: '0.7rem',
+                  height: 18,
+                  fontSize: '0.65rem',
+                  fontFamily: '"JetBrains Mono", monospace',
                   fontWeight: 700,
-                  bgcolor: 'rgba(239, 68, 68, 0.2)',
-                  color: '#f87171',
+                  bgcolor: 'rgba(239, 68, 68, 0.15)',
+                  color: '#EF4444',
                   border: '1px solid rgba(239, 68, 68, 0.3)',
                 }}
               />
@@ -272,9 +270,9 @@ export default function VideoBatchReview({
                     e.stopPropagation();
                     onRemoveItem(item.id);
                   }}
-                  sx={{ p: 0.2, color: 'text.secondary', '&:hover': { color: '#f87171' } }}
+                  sx={{ p: 0.2, color: '#475569', '&:hover': { color: '#EF4444' } }}
                 >
-                  <Delete sx={{ fontSize: 15 }} />
+                  <Delete sx={{ fontSize: 14 }} />
                 </IconButton>
               )}
             </Box>
@@ -288,19 +286,19 @@ export default function VideoBatchReview({
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-            gap: 2.5,
+            gap: 2,
           }}
         >
-          {/* Video Player */}
+          {/* Video Player Box */}
           <Box
             sx={{
-              background: 'rgba(0,0,0,0.6)',
-              borderRadius: 2,
+              background: '#090B0E',
+              borderRadius: '10px',
               overflow: 'hidden',
-              border: '1px solid rgba(255,255,255,0.1)',
+              border: '1px solid #1E2638',
               display: 'flex',
               alignItems: 'center',
-              justify: 'center',
+              justifyContent: 'center',
               aspectRatio: '16/9',
             }}
           >
@@ -312,32 +310,31 @@ export default function VideoBatchReview({
             />
           </Box>
 
-          {/* Controls Panel */}
+          {/* Controls Node Panel */}
           <Box
             sx={{
-              background: 'rgba(255,255,255,0.04)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              borderRadius: 2,
-              p: '20px 22px',
+              background: '#121620',
+              border: '1px solid #1E2638',
+              borderRadius: '10px',
+              p: '18px 20px',
               display: 'flex',
               flexDirection: 'column',
-              justify: 'space-between',
+              justifyContent: 'space-between',
             }}
           >
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                <Tune sx={{ fontSize: 16, color: 'text.disabled' }} />
-                <Typography variant="caption" fontWeight={600} textTransform="uppercase" letterSpacing={0.7} color="text.disabled">
-                  Silence Detection Settings
+                <Tune sx={{ fontSize: 16, color: '#00E5FF' }} />
+                <Typography variant="caption" fontWeight={700} textTransform="uppercase" letterSpacing={0.8} sx={{ color: '#00E5FF', fontFamily: '"JetBrains Mono", monospace' }}>
+                  [NODE_PARAMS] THRESHOLD_SETTINGS
                 </Typography>
               </Box>
 
               {/* Threshold Slider */}
-              <Box sx={{ mb: 2.5 }}>
+              <Box sx={{ mb: 2 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
                   <Typography variant="body2" color="text.secondary">Silence Threshold</Typography>
-                  <Typography variant="body2" fontWeight={700} color="primary.main">{localThreshold} dB</Typography>
+                  <Typography variant="caption" fontWeight={700} color="#00E5FF" sx={{ fontFamily: '"JetBrains Mono", monospace' }}>{localThreshold} dB</Typography>
                 </Box>
                 <Slider
                   min={-60}
@@ -347,16 +344,13 @@ export default function VideoBatchReview({
                   onChangeCommitted={(e, val) => onSettingsChange({ ...settings, thresholdDb: val })}
                   size="small"
                 />
-                <Typography variant="caption" color="text.disabled">
-                  Lower dB = stricter silence detection. Higher dB = catches background hums.
-                </Typography>
               </Box>
 
               {/* Min Duration Slider */}
               <Box sx={{ mb: 2 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                  <Typography variant="body2" color="text.secondary">Minimum Silence Length</Typography>
-                  <Typography variant="body2" fontWeight={700} color="primary.main">{localMinDuration.toFixed(2)}s</Typography>
+                  <Typography variant="body2" color="text.secondary">Min Silence Length</Typography>
+                  <Typography variant="caption" fontWeight={700} color="#00E5FF" sx={{ fontFamily: '"JetBrains Mono", monospace' }}>{localMinDuration.toFixed(2)}s</Typography>
                 </Box>
                 <Slider
                   min={0.05}
@@ -367,81 +361,72 @@ export default function VideoBatchReview({
                   onChangeCommitted={(e, val) => onSettingsChange({ ...settings, minSilenceDuration: val })}
                   size="small"
                 />
-                <Typography variant="caption" color="text.disabled">
-                  Pauses shorter than this duration are kept as natural speech gaps.
-                </Typography>
               </Box>
             </Box>
 
-            <Box sx={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 1.5, p: 1.5, mt: 1 }}>
-              <Typography variant="body2" fontWeight={700} noWrap color="text.primary">
+            <Box sx={{ background: '#0E121B', border: '1px solid #1E2638', borderRadius: '6px', p: 1.2 }}>
+              <Typography variant="body2" fontWeight={700} noWrap color="#F1F5F9">
                 {activeItem.file.name}
               </Typography>
-              <Typography variant="caption" color="text.secondary">
-                Found <strong>{activeItem.segments.filter((s) => s.keepForRemoval).length}</strong> silent segments marked for removal (Red zones)
+              <Typography variant="caption" color="text.secondary" sx={{ fontFamily: '"JetBrains Mono", monospace', fontSize: '0.7rem' }}>
+                Found <strong style={{ color: '#EF4444' }}>{activeItem.segments.filter((s) => s.keepForRemoval).length}</strong> silent segments marked for removal
               </Typography>
             </Box>
           </Box>
         </Box>
       )}
 
-      {/* Waveform Visualization Card */}
+      {/* Waveform Box */}
       <Box
         sx={{
-          background: 'rgba(255,255,255,0.04)',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: 2,
-          p: '20px 22px',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06)',
+          background: '#121620',
+          border: '1px solid #1E2638',
+          borderRadius: '10px',
+          p: '18px 20px',
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <GraphicEq sx={{ fontSize: 16, color: 'text.disabled' }} />
-            <Typography variant="caption" fontWeight={600} textTransform="uppercase" letterSpacing={0.7} color="text.disabled">
-              Audio Waveform {activeItem?.file.name}
+            <GraphicEq sx={{ fontSize: 16, color: '#00E5FF' }} />
+            <Typography variant="caption" fontWeight={700} textTransform="uppercase" letterSpacing={0.8} sx={{ color: '#00E5FF', fontFamily: '"JetBrains Mono", monospace' }}>
+              WAVEFORM :: {activeItem?.file.name}
             </Typography>
           </Box>
 
           <Box sx={{ display: 'flex', gap: 2 }}>
-            <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
-              <Box component="span" sx={{ width: 10, height: 10, borderRadius: '2px', bgcolor: 'rgba(239, 68, 68, 0.7)' }} />
-              Red = Silence (ToRemove)
+            <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.8, fontFamily: '"JetBrains Mono", monospace', fontSize: '0.7rem' }}>
+              <Box component="span" sx={{ width: 8, height: 8, borderRadius: '2px', bgcolor: '#EF4444' }} />
+              Red = Silence (Cut)
             </Typography>
-            <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
-              <Box component="span" sx={{ width: 10, height: 10, borderRadius: '2px', bgcolor: 'rgba(148, 163, 184, 0.4)' }} />
+            <Typography variant="caption" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 0.8, fontFamily: '"JetBrains Mono", monospace', fontSize: '0.7rem' }}>
+              <Box component="span" sx={{ width: 8, height: 8, borderRadius: '2px', bgcolor: '#475569' }} />
               Gray = Speech (Keep)
             </Typography>
           </Box>
         </Box>
 
-        <Box ref={waveformRef} sx={{ cursor: 'pointer', borderRadius: 1.5, overflow: 'hidden', bg: 'rgba(0,0,0,0.2)' }} />
-        <Typography variant="caption" color="text.disabled" sx={{ display: 'block', mt: 1 }}>
-          💡 Click any red region on the waveform to jump the video player to that timestamp or toggle silence removal.
-        </Typography>
+        <Box ref={waveformRef} sx={{ cursor: 'pointer', borderRadius: '6px', overflow: 'hidden', background: '#090B0E', border: '1px solid #1A2130' }} />
       </Box>
 
       {/* Segments Inspector List */}
       <Box
         sx={{
-          background: 'rgba(255,255,255,0.04)',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: 2,
+          background: '#121620',
+          border: '1px solid #1E2638',
+          borderRadius: '10px',
           overflow: 'hidden',
         }}
       >
-        <Box sx={{ px: 2.5, py: 1.8, borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)' }}>
-          <Typography variant="subtitle2" fontWeight={700}>
+        <Box sx={{ px: 2.5, py: 1.5, borderBottom: '1px solid #1E2638', background: '#0E121B' }}>
+          <Typography variant="subtitle2" fontWeight={700} color="#F1F5F9">
             Detected Silence Segments ({activeItem?.segments.length || 0})
           </Typography>
         </Box>
 
-        <Box sx={{ maxHeight: 220, overflowY: 'auto' }}>
+        <Box sx={{ maxHeight: 200, overflowY: 'auto' }}>
           {activeItem?.segments.length === 0 && (
-            <Typography variant="body2" color="text.secondary" sx={{ p: 2.5 }}>
-              No silent segments detected for this video with current settings. Try increasing the silence threshold slider.
+            <Typography variant="body2" color="text.secondary" sx={{ p: 2.5, fontFamily: '"JetBrains Mono", monospace' }}>
+              No silent segments detected for this video with current parameters.
             </Typography>
           )}
 
@@ -451,21 +436,21 @@ export default function VideoBatchReview({
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                justify: 'space-between',
+                justifyContent: 'space-between',
                 px: 2.5,
-                py: 1.2,
-                borderBottom: '1px solid rgba(255,255,255,0.04)',
-                '&:hover': { background: 'rgba(255,255,255,0.03)' },
+                py: 1,
+                borderBottom: '1px solid #1A2130',
+                '&:hover': { background: '#171D2B' },
               }}
             >
               <Button
                 variant="text"
                 size="small"
-                startIcon={<PlayArrow sx={{ fontSize: 14 }} />}
+                startIcon={<PlayArrow sx={{ fontSize: 14, display: 'block', color: '#00E5FF' }} />}
                 onClick={() => {
                   if (videoRef.current) videoRef.current.currentTime = seg.start;
                 }}
-                sx={{ color: 'text.primary', textTransform: 'none', fontWeight: 600 }}
+                sx={{ color: '#F1F5F9', textTransform: 'none', fontWeight: 600, fontFamily: '"JetBrains Mono", monospace', fontSize: '0.8rem' }}
               >
                 #{idx + 1}: {formatTime(seg.start)} – {formatTime(seg.end)}{' '}
                 <Box component="span" color="text.secondary" fontWeight={400} sx={{ ml: 1 }}>
@@ -479,10 +464,10 @@ export default function VideoBatchReview({
                     size="small"
                     checked={seg.keepForRemoval}
                     onChange={() => onToggleSegment(activeItem.id, seg.id)}
-                    sx={{ color: 'rgba(255,255,255,0.3)', '&.Mui-checked': { color: 'primary.main' } }}
+                    sx={{ color: '#475569', '&.Mui-checked': { color: '#00E5FF' } }}
                   />
                 }
-                label={<Typography variant="body2" fontWeight={500}>Remove silence</Typography>}
+                label={<Typography variant="caption" fontWeight={600} sx={{ fontFamily: '"JetBrains Mono", monospace', color: '#94A3B8' }}>Remove silence</Typography>}
               />
             </Box>
           ))}
@@ -494,19 +479,20 @@ export default function VideoBatchReview({
         <Button
           variant="outlined"
           size="large"
-          startIcon={<RestartAlt sx={{ fontSize: 20, display: 'block' }} />}
+          startIcon={<RestartAlt sx={{ fontSize: 18, display: 'block' }} />}
           onClick={onCancel}
           sx={{
-            py: 1.4,
+            py: 1.3,
             px: 3,
             display: 'inline-flex',
             alignItems: 'center',
-            justify: 'center',
+            justifyContent: 'center',
             textTransform: 'none',
-            borderColor: 'rgba(255,255,255,0.2)',
+            borderColor: '#1E2638',
+            background: '#121620',
             color: 'text.secondary',
-            fontWeight: 600,
-            '&:hover': { borderColor: 'rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.05)' },
+            fontWeight: 700,
+            '&:hover': { borderColor: '#94A3B8', background: '#1A2130' },
           }}
         >
           Start Over
@@ -515,18 +501,21 @@ export default function VideoBatchReview({
         <Button
           variant="contained"
           size="large"
-          startIcon={<ContentCut sx={{ fontSize: 20, display: 'block' }} />}
+          startIcon={<ContentCut sx={{ fontSize: 18, display: 'block' }} />}
           disabled={totalSegmentsToRemove === 0}
           onClick={onConfirmBatch}
           sx={{
-            py: 1.4,
+            py: 1.3,
             px: 4,
             display: 'inline-flex',
             alignItems: 'center',
-            justify: 'center',
+            justifyContent: 'center',
             textTransform: 'none',
             fontWeight: 700,
-            fontSize: '0.95rem',
+            fontSize: '0.9rem',
+            background: '#00E5FF',
+            color: '#050B14',
+            '&:hover': { background: '#67F5FF' },
           }}
         >
           Cut All {batchItems.length} {batchItems.length === 1 ? 'Video' : 'Videos'}

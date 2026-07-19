@@ -12,14 +12,14 @@ export default function WaveformCard({ waveformData }) {
     const { samples, padded } = waveformData;
     const W = canvas.offsetWidth || 700;
     const H = 72;
-    canvas.width  = W * devicePixelRatio;
+    canvas.width = W * devicePixelRatio;
     canvas.height = H * devicePixelRatio;
     const ctx = canvas.getContext('2d');
     ctx.scale(devicePixelRatio, devicePixelRatio);
     ctx.clearRect(0, 0, W, H);
 
     const step = Math.ceil(samples.length / W);
-    const mid  = H / 2;
+    const mid = H / 2;
 
     for (let x = 0; x < W; x++) {
       let max = 0;
@@ -30,9 +30,9 @@ export default function WaveformCard({ waveformData }) {
       }
       if (padded) {
         const fi = Math.floor((base / samples.length) * padded.length);
-        ctx.strokeStyle = padded[fi] ? '#E2E8F0' : 'rgba(255,255,255,0.05)';
+        ctx.strokeStyle = padded[fi] ? '#00E5FF' : '#1E2638';
       } else {
-        ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+        ctx.strokeStyle = '#00E5FF';
       }
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -43,19 +43,33 @@ export default function WaveformCard({ waveformData }) {
   }, [waveformData]);
 
   return (
-    <Box sx={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 2, p: '20px 22px', boxShadow: '0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06)' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-        <GraphicEq sx={{ fontSize: 15, color: 'text.disabled' }} />
-        <Typography variant="caption" fontWeight={600} textTransform="uppercase" letterSpacing={0.7} color="text.disabled">
-          Waveform
-        </Typography>
-        <Typography variant="caption" color="text.disabled" sx={{ ml: 'auto' }}>
-          <Box component="span" color="primary.light">Purple</Box>
-          {' '}= speech kept · dark = silence removed
+    <Box
+      sx={{
+        background: '#121620',
+        border: '1px solid #1E2638',
+        borderRadius: '12px',
+        p: '20px 22px',
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <GraphicEq sx={{ fontSize: 16, color: '#00E5FF' }} />
+          <Typography
+            variant="caption"
+            fontWeight={700}
+            textTransform="uppercase"
+            letterSpacing={0.8}
+            sx={{ color: '#00E5FF', fontFamily: '"JetBrains Mono", monospace' }}
+          >
+            [WAVEFORM_NODE] AUDIO_SIGNAL
+          </Typography>
+        </Box>
+        <Typography variant="caption" sx={{ color: '#94A3B8', fontFamily: '"JetBrains Mono", monospace', fontSize: '0.7rem' }}>
+          Cyan = Kept Speech · Dark = Removed Silence
         </Typography>
       </Box>
 
-        <Box sx={{ borderRadius: 1, overflow: 'hidden', bgcolor: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.05)' }}>
+      <Box sx={{ borderRadius: '6px', overflow: 'hidden', bgcolor: '#090B0E', border: '1px solid #1A2130' }}>
         <canvas
           ref={canvasRef}
           height={72}

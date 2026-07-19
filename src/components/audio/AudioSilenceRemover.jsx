@@ -135,7 +135,7 @@ export default function AudioSilenceRemover() {
   const isMulti = files.length > 1;
 
   return (
-    <Stack spacing={1.25}>
+    <Stack spacing={2.5}>
       <DropZoneCard onFilesSelected={loadFiles} files={files} />
 
       {files.length > 0 && (
@@ -152,24 +152,21 @@ export default function AudioSilenceRemover() {
       {waveformData && <WaveformCard waveformData={waveformData} />}
       {stats && <StatsRow stats={stats} />}
 
-      {/* Progress */}
+      {/* Progress Box */}
       {showProgress && (
         <Box
           sx={{
-            background: 'rgba(255,255,255,0.04)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: 2,
-            p: '16px 22px',
-            boxShadow: '0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06)',
+            background: '#121620',
+            border: '1px solid #00E5FF',
+            borderRadius: '10px',
+            p: '18px 22px',
           }}
         >
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="caption" color="text.secondary" sx={{ fontFamily: '"JetBrains Mono", monospace' }}>
               {progress.msg}
             </Typography>
-            <Typography variant="body2" fontWeight={700} color="primary.main">
+            <Typography variant="caption" fontWeight={700} color="#00E5FF" sx={{ fontFamily: '"JetBrains Mono", monospace' }}>
               {progress.pct}%
             </Typography>
           </Box>
@@ -180,17 +177,27 @@ export default function AudioSilenceRemover() {
       {/* Error */}
       {error && <Alert severity="error">{error}</Alert>}
 
-      {/* Process */}
+      {/* Process Button */}
       <Button
         variant="contained"
         size="large"
         fullWidth
         disabled={!files.length || processing}
-        startIcon={<AutoFixHigh />}
+        startIcon={<AutoFixHigh sx={{ fontSize: 20, display: 'block' }} />}
         onClick={processAll}
-        sx={{ py: 1.8, fontSize: '0.95rem', fontWeight: 700 }}
+        sx={{
+          py: 1.5,
+          fontSize: '0.95rem',
+          fontWeight: 700,
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#00E5FF',
+          color: '#050B14',
+          '&:hover': { background: '#67F5FF' },
+        }}
       >
-        {processing ? 'Processing…' : 'Remove Silence'}
+        {processing ? 'Processing Audio Stream…' : 'Remove Silence'}
       </Button>
 
       {/* Single file download */}
@@ -199,23 +206,24 @@ export default function AudioSilenceRemover() {
           variant="outlined"
           size="large"
           fullWidth
-          startIcon={<Download />}
+          startIcon={<Download sx={{ fontSize: 18, display: 'block' }} />}
           onClick={() => downloadSingle(0)}
           sx={{
-            py: 1.8,
+            py: 1.4,
             fontWeight: 700,
-            borderColor: 'rgba(52,211,153,0.30)',
-            color: 'success.main',
-            background: 'rgba(52,211,153,0.07)',
-            backdropFilter: 'blur(12px)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderColor: '#10B981',
+            color: '#10B981',
+            background: 'rgba(16,185,129,0.06)',
             '&:hover': {
-              background: 'rgba(52,211,153,0.14)',
-              borderColor: 'success.main',
-              boxShadow: '0 4px 20px rgba(52,211,153,0.20)',
+              background: 'rgba(16,185,129,0.15)',
+              borderColor: '#34D399',
             },
           }}
         >
-          Download Trimmed File
+          Download Trimmed File (.wav)
         </Button>
       )}
 
@@ -226,23 +234,25 @@ export default function AudioSilenceRemover() {
           size="large"
           fullWidth
           disabled={zipBusy}
-          startIcon={<FolderZip />}
+          startIcon={<FolderZip sx={{ fontSize: 18, display: 'block' }} />}
           onClick={downloadAll}
           sx={{
-            py: 1.8,
+            py: 1.4,
             fontWeight: 700,
-            borderColor: 'rgba(255,255,255,0.22)',
-            background: 'rgba(255,255,255,0.05)',
-            backdropFilter: 'blur(12px)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderColor: '#A855F7',
+            color: '#ffffff',
+            background: '#A855F7',
             '&:hover': {
-              background: 'rgba(255,255,255,0.10)',
-              borderColor: 'primary.main',
-              boxShadow: '0 4px 20px rgba(255,255,255,0.12)',
+              background: '#C084FC',
+              borderColor: '#C084FC',
             },
           }}
         >
           {zipBusy
-            ? 'Creating ZIP…'
+            ? 'Creating ZIP Archive…'
             : `Download as ZIP - ${doneCount} file${doneCount > 1 ? 's' : ''}`}
         </Button>
       )}
