@@ -33,7 +33,7 @@ export const theme = createTheme({
       main: '#F59E0B',
     },
     background: {
-      default: '#0B0D12',
+      default: '#141414',
       paper: '#121620',
     },
     divider: '#1E2638',
@@ -88,9 +88,7 @@ export const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          background: '#0B0D12',
-          backgroundImage: 'radial-gradient(#1E2638 1px, transparent 1px)',
-          backgroundSize: '24px 24px',
+          background: '#141414',
           minHeight: '100vh',
           color: '#F1F5F9',
         },
