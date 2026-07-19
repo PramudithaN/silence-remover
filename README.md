@@ -5,6 +5,7 @@
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
 ![FFmpeg WASM](https://img.shields.io/badge/FFmpeg_WASM-0078D7?style=for-the-badge&logo=ffmpeg&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
 
 A professional, high-performance web application designed to automatically detect and remove silent parts from both **audio** and **video** files. Built with a **privacy-first** approach, 100% of processing runs locally in your browser—your media never leaves your device.
 
@@ -105,6 +106,12 @@ A professional, high-performance web application designed to automatically detec
 
 ---
 
+## 📜 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
 ## 🙋‍♂️ Connect with Me
 
 - **GitHub**: [github.com/PramudithaN](https://github.com/PramudithaN)
@@ -114,3 +121,4 @@ A professional, high-performance web application designed to automatically detec
 ---
 
 *Developed with ❤️ by Pramuditha Nadun.*
+
