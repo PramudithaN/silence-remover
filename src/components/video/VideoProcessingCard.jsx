@@ -36,7 +36,7 @@ export default function VideoProcessingCard({ batchItems, currentlyProcessingIte
             border: '1px solid rgba(255,255,255,0.16)',
             display: 'flex',
             alignItems: 'center',
-            justify: 'center',
+            justifyContent: 'center',
             color: 'primary.main',
             animation: 'pulse 2s infinite',
             '@keyframes pulse': {

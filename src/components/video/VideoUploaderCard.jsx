@@ -93,7 +93,7 @@ export default function VideoUploaderCard({ onFilesSelected }) {
             border: '1px solid rgba(255,255,255,0.16)',
             display: 'flex',
             alignItems: 'center',
-            justify: 'center',
+            justifyContent: 'center',
             color: 'primary.main',
             mx: 'auto',
             mb: 2,

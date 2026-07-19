@@ -96,7 +96,7 @@ export default function VideoResultDownloadCard({ batchItems, onReset }) {
             border: '1px solid rgba(52,211,153,0.35)',
             display: 'inline-flex',
             alignItems: 'center',
-            justify: 'center',
+            justifyContent: 'center',
             color: '#34D399',
             boxShadow: '0 0 16px rgba(52,211,153,0.2)',
           }}
@@ -192,7 +192,7 @@ export default function VideoResultDownloadCard({ batchItems, onReset }) {
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                justify: 'space-between',
+                justifyContent: 'space-between',
                 px: 2.5,
                 py: 1.6,
                 gap: 2,
